@@ -1,0 +1,114 @@
+
+
+
+Inro to Methods in Pandas which works on objects.
+Methods actually does modifications adding values, removing values to the objects 
+
+importing the packages:
+import numpy as np
+
+import pandas as pd
+
+import matplotlib.pyplot as plt
+
+price_rates_list = [23,56,89,76,79,90]
+
+pd.Series(price_rates_list)
+
+0    23
+1    56
+2    89
+3    76
+4    79
+5    90
+dtype: int64
+
+ s = pd.Series(price_rates_list)  # assing the series to varaible s
+
+s
+
+0    23
+1    56
+2    89
+3    76
+4    79
+5    90
+dtype: int64
+
+s.sum()  # calling sum method to do add the each element in the list 
+
+413
+
+s.product()   # it multiply all the values in the list 
+
+61942547520
+
+s.mean() # mean is for find the avarage 
+
+68.83333333333333
+
+s.min() # minimum value in the list using min() method
+
+23
+
+s.max() # maximum value in the list 
+
+90
+
+parameters and arguments
+
+​
+
+fruits = ["Apple","Banana","Oranges","Grapes","Cherries"]
+
+months = ["Jan","Feb","March","April","May"]
+
+pd.Series()
+
+0       Apple
+1      Banana
+2     Oranges
+3      Grapes
+4    Cherries
+dtype: object
+
+ Here we are passing fruits and months as argumetns to Series , fruits as a data and months as an index type.
+
+    # default argumens signature in series 
+
+     Init signature: pd.Series(data=None, index=None, dtype=None, name=None, copy=False, fastpath=False)
+    Here , data = fruits, index= months , insted of default index values, default index in pandas is numerical index
+
+pd.Series(fruits, months) 
+
+Jan         Apple
+Feb        Banana
+March     Oranges
+April      Grapes
+May      Cherries
+dtype: object
+
+you can also give parameter names explicitly
+
+pd.Series(data = fruits, index= months)
+
+Jan         Apple
+Feb        Banana
+March     Oranges
+April      Grapes
+May      Cherries
+dtype: object
+
+another way to give index parametar 
+
+pd.Series(fruits, index= months)
+
+Jan         Apple
+Feb        Banana
+March     Oranges
+April      Grapes
+May      Cherries
+dtype: object
+
+
+
