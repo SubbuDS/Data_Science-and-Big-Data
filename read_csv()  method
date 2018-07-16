@@ -1,0 +1,280 @@
+
+
+
+ import series with read_csv method()
+
+import numpy as np
+import pandas as pd
+
+pd.read_csv("pokemon.csv")  # here you get a data frame as a result , basically it's table with multiple rows and cloumns 
+
+	Pokemon 	Type
+0 	Bulbasaur 	Grass
+1 	Ivysaur 	Grass
+2 	Venusaur 	Grass
+3 	Charmander 	Fire
+4 	Charmeleon 	Fire
+5 	Charizard 	Fire
+6 	Squirtle 	Water
+7 	Wartortle 	Water
+8 	Blastoise 	Water
+9 	Caterpie 	Bug
+10 	Metapod 	Bug
+11 	Butterfree 	Bug
+12 	Weedle 	Bug
+13 	Kakuna 	Bug
+14 	Beedrill 	Bug
+15 	Pidgey 	Normal
+16 	Pidgeotto 	Normal
+17 	Pidgeot 	Normal
+18 	Rattata 	Normal
+19 	Raticate 	Normal
+20 	Spearow 	Normal
+21 	Fearow 	Normal
+22 	Ekans 	Poison
+23 	Arbok 	Poison
+24 	Pikachu 	Electric
+25 	Raichu 	Electric
+26 	Sandshrew 	Ground
+27 	Sandslash 	Ground
+28 	Nidoran 	Poison
+29 	Nidorina 	Poison
+... 	... 	...
+691 	Clauncher 	Water
+692 	Clawitzer 	Water
+693 	Helioptile 	Electric
+694 	Heliolisk 	Electric
+695 	Tyrunt 	Rock
+696 	Tyrantrum 	Rock
+697 	Amaura 	Rock
+698 	Aurorus 	Rock
+699 	Sylveon 	Fairy
+700 	Hawlucha 	Fighting
+701 	Dedenne 	Electric
+702 	Carbink 	Rock
+703 	Goomy 	Dragon
+704 	Sliggoo 	Dragon
+705 	Goodra 	Dragon
+706 	Klefki 	Steel
+707 	Phantump 	Ghost
+708 	Trevenant 	Ghost
+709 	Pumpkaboo 	Ghost
+710 	Gourgeist 	Ghost
+711 	Bergmite 	Ice
+712 	Avalugg 	Ice
+713 	Noibat 	Flying
+714 	Noivern 	Flying
+715 	Xerneas 	Fairy
+716 	Yveltal 	Dark
+717 	Zygarde 	Dragon
+718 	Diancie 	Rock
+719 	Hoopa 	Psychic
+720 	Volcanion 	Fire
+
+721 rows × 2 columns
+
+pd.read_csv("pokemon.csv", usecols =["Pokemon"], squeeze=True)  #you will get the required columns using usecols parameter, here 'pokeman' column
+
+0       Bulbasaur
+1         Ivysaur
+2        Venusaur
+3      Charmander
+4      Charmeleon
+5       Charizard
+6        Squirtle
+7       Wartortle
+8       Blastoise
+9        Caterpie
+10        Metapod
+11     Butterfree
+12         Weedle
+13         Kakuna
+14       Beedrill
+15         Pidgey
+16      Pidgeotto
+17        Pidgeot
+18        Rattata
+19       Raticate
+20        Spearow
+21         Fearow
+22          Ekans
+23          Arbok
+24        Pikachu
+25         Raichu
+26      Sandshrew
+27      Sandslash
+28        Nidoran
+29       Nidorina
+          ...    
+691     Clauncher
+692     Clawitzer
+693    Helioptile
+694     Heliolisk
+695        Tyrunt
+696     Tyrantrum
+697        Amaura
+698       Aurorus
+699       Sylveon
+700      Hawlucha
+701       Dedenne
+702       Carbink
+703         Goomy
+704       Sliggoo
+705        Goodra
+706        Klefki
+707      Phantump
+708     Trevenant
+709     Pumpkaboo
+710     Gourgeist
+711      Bergmite
+712       Avalugg
+713        Noibat
+714       Noivern
+715       Xerneas
+716       Yveltal
+717       Zygarde
+718       Diancie
+719         Hoopa
+720     Volcanion
+Name: Pokemon, Length: 721, dtype: object
+
+pokeman = pd.read_csv("pokemon.csv", squeeze=True) 
+
+pokeman
+
+	Pokemon 	Type
+0 	Bulbasaur 	Grass
+1 	Ivysaur 	Grass
+2 	Venusaur 	Grass
+3 	Charmander 	Fire
+4 	Charmeleon 	Fire
+5 	Charizard 	Fire
+6 	Squirtle 	Water
+7 	Wartortle 	Water
+8 	Blastoise 	Water
+9 	Caterpie 	Bug
+10 	Metapod 	Bug
+11 	Butterfree 	Bug
+12 	Weedle 	Bug
+13 	Kakuna 	Bug
+14 	Beedrill 	Bug
+15 	Pidgey 	Normal
+16 	Pidgeotto 	Normal
+17 	Pidgeot 	Normal
+18 	Rattata 	Normal
+19 	Raticate 	Normal
+20 	Spearow 	Normal
+21 	Fearow 	Normal
+22 	Ekans 	Poison
+23 	Arbok 	Poison
+24 	Pikachu 	Electric
+25 	Raichu 	Electric
+26 	Sandshrew 	Ground
+27 	Sandslash 	Ground
+28 	Nidoran 	Poison
+29 	Nidorina 	Poison
+... 	... 	...
+691 	Clauncher 	Water
+692 	Clawitzer 	Water
+693 	Helioptile 	Electric
+694 	Heliolisk 	Electric
+695 	Tyrunt 	Rock
+696 	Tyrantrum 	Rock
+697 	Amaura 	Rock
+698 	Aurorus 	Rock
+699 	Sylveon 	Fairy
+700 	Hawlucha 	Fighting
+701 	Dedenne 	Electric
+702 	Carbink 	Rock
+703 	Goomy 	Dragon
+704 	Sliggoo 	Dragon
+705 	Goodra 	Dragon
+706 	Klefki 	Steel
+707 	Phantump 	Ghost
+708 	Trevenant 	Ghost
+709 	Pumpkaboo 	Ghost
+710 	Gourgeist 	Ghost
+711 	Bergmite 	Ice
+712 	Avalugg 	Ice
+713 	Noibat 	Flying
+714 	Noivern 	Flying
+715 	Xerneas 	Fairy
+716 	Yveltal 	Dark
+717 	Zygarde 	Dragon
+718 	Diancie 	Rock
+719 	Hoopa 	Psychic
+720 	Volcanion 	Fire
+
+721 rows × 2 columns
+
+​
+
+google = pd.read_csv("google_stock_price.csv", squeeze=True)  # squeeze prameter for read data as a sereis not in a dataframe
+
+google
+
+0        50.12
+1        54.10
+2        54.65
+3        52.38
+4        52.95
+5        53.90
+6        53.02
+7        50.95
+8        51.13
+9        50.07
+10       50.70
+11       49.95
+12       50.74
+13       51.10
+14       51.10
+15       52.61
+16       53.70
+17       55.69
+18       55.94
+19       56.93
+20       58.69
+21       59.62
+22       58.86
+23       59.13
+24       60.35
+25       59.86
+26       59.07
+27       63.37
+28       65.47
+29       64.74
+         ...  
+2982    675.22
+2983    668.26
+2984    680.04
+2985    684.11
+2986    692.10
+2987    699.21
+2988    694.49
+2989    697.77
+2990    695.36
+2991    705.63
+2992    715.09
+2993    720.64
+2994    716.98
+2995    720.95
+2996    719.85
+2997    733.78
+2998    736.96
+2999    741.19
+3000    738.63
+3001    742.74
+3002    739.77
+3003    738.42
+3004    741.77
+3005    745.91
+3006    768.79
+3007    772.88
+3008    771.07
+3009    773.18
+3010    771.61
+3011    782.22
+Name: Stock Price, Length: 3012, dtype: float64
+
+
+
