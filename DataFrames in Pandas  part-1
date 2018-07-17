@@ -1,0 +1,400 @@
+
+
+import pandas as pd
+
+​
+
+nba = pd.read_csv("nba.csv")
+
+nba.head(1) # it's abrnad new dataframe
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+0 	Avery Bradley 	Boston Celtics 	0.0 	PG 	25.0 	6-2 	180.0 	Texas 	7730337.0
+
+nba.tail(1) # completely new data frame
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+457 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN
+
+nba.index  # index is an attribute 
+
+RangeIndex(start=0, stop=458, step=1)
+
+nba.values # attribute
+
+array([['Avery Bradley', 'Boston Celtics', 0.0, ..., 180.0, 'Texas',
+        7730337.0],
+       ['Jae Crowder', 'Boston Celtics', 99.0, ..., 235.0, 'Marquette',
+        6796117.0],
+       ['John Holland', 'Boston Celtics', 30.0, ..., 205.0,
+        'Boston University', nan],
+       ...,
+       ['Tibor Pleiss', 'Utah Jazz', 21.0, ..., 256.0, nan, 2900000.0],
+       ['Jeff Withey', 'Utah Jazz', 24.0, ..., 231.0, 'Kansas', 947276.0],
+       [nan, nan, nan, ..., nan, nan, nan]], dtype=object)
+
+nba.shape  # attribute , no of rows and cloumns   458 rows and 9 columns
+
+(458, 9)
+
+nba.dtypes  #  attribute nba.head()
+
+Name         object
+Team         object
+Number      float64
+Position     object
+Age         float64
+Height       object
+Weight      float64
+College      object
+Salary      float64
+dtype: object
+
+nba.head()
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+0 	Avery Bradley 	Boston Celtics 	0.0 	PG 	25.0 	6-2 	180.0 	Texas 	7730337.0
+1 	Jae Crowder 	Boston Celtics 	99.0 	SF 	25.0 	6-6 	235.0 	Marquette 	6796117.0
+2 	John Holland 	Boston Celtics 	30.0 	SG 	27.0 	6-5 	205.0 	Boston University 	NaN
+3 	R.J. Hunter 	Boston Celtics 	28.0 	SG 	22.0 	6-5 	185.0 	Georgia State 	1148640.0
+4 	Jonas Jerebko 	Boston Celtics 	8.0 	PF 	29.0 	6-10 	231.0 	NaN 	5000000.0
+
+nba.columns  # attribute
+
+Index(['Name', 'Team', 'Number', 'Position', 'Age', 'Height', 'Weight',
+       'College', 'Salary'],
+      dtype='object')
+
+nba.axes  # combine the index and second index which is cloumns index as one
+
+[RangeIndex(start=0, stop=458, step=1),
+ Index(['Name', 'Team', 'Number', 'Position', 'Age', 'Height', 'Weight',
+        'College', 'Salary'],
+       dtype='object')]
+
+nba.info()  # summary of the dataframe
+
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 458 entries, 0 to 457
+Data columns (total 9 columns):
+Name        457 non-null object
+Team        457 non-null object
+Number      457 non-null float64
+Position    457 non-null object
+Age         457 non-null float64
+Height      457 non-null object
+Weight      457 non-null float64
+College     373 non-null object
+Salary      446 non-null float64
+dtypes: float64(4), object(5)
+memory usage: 23.3+ KB
+
+nba.get_dtype_counts()  # gives a series where index labels are represent data types and values are represnting how many columns 
+
+                        # with in my dataframe are storing that kind of datatype
+
+float64    4
+object     5
+dtype: int64
+
+Differences between Shared Methods
+
+rev = pd.read_csv("revenue.csv", index_col = "Date")
+
+rev.head(3)
+
+	New York 	Los Angeles 	Miami
+Date 			
+1/1/16 	985 	122 	499
+1/2/16 	738 	788 	534
+1/3/16 	14 	20 	933
+
+s = pd.Series([1,2,3])
+
+s.sum()
+
+6
+
+rev.sum()  # brand new Series 
+
+New York       5475
+Los Angeles    5134
+Miami          5641
+dtype: int64
+
+rev.sum(axis = "columns")
+
+Date
+1/1/16     1606
+1/2/16     2060
+1/3/16      967
+1/4/16     2519
+1/5/16      438
+1/6/16     1935
+1/7/16     1234
+1/8/16     2313
+1/9/16     2623
+1/10/16     555
+dtype: int64
+
+Select one Column from a DataFrame
+
+nba = pd.read_csv("nba.csv")
+
+nba.head(3)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+0 	Avery Bradley 	Boston Celtics 	0.0 	PG 	25.0 	6-2 	180.0 	Texas 	7730337.0
+1 	Jae Crowder 	Boston Celtics 	99.0 	SF 	25.0 	6-6 	235.0 	Marquette 	6796117.0
+2 	John Holland 	Boston Celtics 	30.0 	SG 	27.0 	6-5 	205.0 	Boston University 	NaN
+
+nba.Name  # when ever you trying to get a single column from dataframe it will give you a series
+
+​
+
+nba.Number
+
+nba.Salary
+
+​
+
+Output = None  # to hide the output
+
+nba["Name"] # same as nba.Name
+
+nba["Salary"]
+
+nba["Number"]
+
+type(nba["Name"])
+
+pandas.core.series.Series
+
+nba["Name"].head(5)  # it will give a brand new series
+
+0    Avery Bradley
+1      Jae Crowder
+2     John Holland
+3      R.J. Hunter
+4    Jonas Jerebko
+Name: Name, dtype: object
+
+Select Two or More Columns from a DataFrame
+
+​
+
+nba[["Team", "Name"]].head(3)  # when ever you are fetching more than one cloumn pandas gives a DataFrame NOT a Series
+
+​
+
+nba[["Number","College"]] # new Dataframe
+
+​
+
+nba[["Salary","Team","Name"]].tail()  # new DataFrame
+
+	Salary 	Team 	Name
+453 	2433333.0 	Utah Jazz 	Shelvin Mack
+454 	900000.0 	Utah Jazz 	Raul Neto
+455 	2900000.0 	Utah Jazz 	Tibor Pleiss
+456 	947276.0 	Utah Jazz 	Jeff Withey
+457 	NaN 	NaN 	NaN
+
+select = ["Salary","Team","Name"]
+
+nba[select]
+
+Add New Cloumn to DataFrame
+
+nba.head(3)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+0 	Avery Bradley 	Boston Celtics 	0.0 	PG 	25.0 	6-2 	180.0 	Texas 	7730337.0
+1 	Jae Crowder 	Boston Celtics 	99.0 	SF 	25.0 	6-6 	235.0 	Marquette 	6796117.0
+2 	John Holland 	Boston Celtics 	30.0 	SG 	27.0 	6-5 	205.0 	Boston University 	NaN
+
+nba["Sport"] = "Basketball"
+
+nba.head(3)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary 	Sport
+0 	Avery Bradley 	Boston Celtics 	0.0 	PG 	25.0 	6-2 	180.0 	Texas 	7730337.0 	Basketball
+1 	Jae Crowder 	Boston Celtics 	99.0 	SF 	25.0 	6-6 	235.0 	Marquette 	6796117.0 	Basketball
+2 	John Holland 	Boston Celtics 	30.0 	SG 	27.0 	6-5 	205.0 	Boston University 	NaN 	Basketball
+
+nba["League"] = "National Basketball Association"
+
+nba.head(3)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary 	Sport 	League
+0 	Avery Bradley 	Boston Celtics 	0.0 	PG 	25.0 	6-2 	180.0 	Texas 	7730337.0 	Basketball 	National Basketball Association
+1 	Jae Crowder 	Boston Celtics 	99.0 	SF 	25.0 	6-6 	235.0 	Marquette 	6796117.0 	Basketball 	National Basketball Association
+2 	John Holland 	Boston Celtics 	30.0 	SG 	27.0 	6-5 	205.0 	Boston University 	NaN 	Basketball 	National Basketball Association
+
+​
+
+nba = pd.read_csv("nba.csv")
+
+nba.insert(3, column = "Sport", value = "Basketball")
+
+nba.head(3)
+
+	Name 	Team 	Number 	Sport 	Position 	Age 	Height 	Weight 	College 	Salary
+0 	Avery Bradley 	Boston Celtics 	0.0 	Basketball 	PG 	25.0 	6-2 	180.0 	Texas 	7730337.0
+1 	Jae Crowder 	Boston Celtics 	99.0 	Basketball 	SF 	25.0 	6-6 	235.0 	Marquette 	6796117.0
+2 	John Holland 	Boston Celtics 	30.0 	Basketball 	SG 	27.0 	6-5 	205.0 	Boston University 	NaN
+
+nba.insert(7, column = "League", value = "National Basketball Association")
+
+nba.head(3)
+
+	Name 	Team 	Number 	Sport 	Position 	Age 	Height 	League 	Weight 	College 	Salary
+0 	Avery Bradley 	Boston Celtics 	0.0 	Basketball 	PG 	25.0 	6-2 	National Basketball Association 	180.0 	Texas 	7730337.0
+1 	Jae Crowder 	Boston Celtics 	99.0 	Basketball 	SF 	25.0 	6-6 	National Basketball Association 	235.0 	Marquette 	6796117.0
+2 	John Holland 	Boston Celtics 	30.0 	Basketball 	SG 	27.0 	6-5 	National Basketball Association 	205.0 	Boston University 	NaN
+
+BroadCasting Operations
+
+nba = pd.read_csv("nba.csv")
+
+nba.head(3)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+0 	Avery Bradley 	Boston Celtics 	0.0 	PG 	25.0 	6-2 	180.0 	Texas 	7730337.0
+1 	Jae Crowder 	Boston Celtics 	99.0 	SF 	25.0 	6-6 	235.0 	Marquette 	6796117.0
+2 	John Holland 	Boston Celtics 	30.0 	SG 	27.0 	6-5 	205.0 	Boston University 	NaN
+
+nba["Age"].add(5)
+
+nba["Age"] + 5
+
+​
+
+nba["Salary"].sub(5000000)
+
+nba["Salary"] - 5000000
+
+​
+
+nba["Weight"].mul(0.453592)
+
+nba["weight in Kilograms"] = nba["Weight"] * 0.453592
+
+nba.head(3)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary 	weight in Kilograms
+0 	Avery Bradley 	Boston Celtics 	0.0 	PG 	25.0 	6-2 	180.0 	Texas 	7730337.0 	81.64656
+1 	Jae Crowder 	Boston Celtics 	99.0 	SF 	25.0 	6-6 	235.0 	Marquette 	6796117.0 	106.59412
+2 	John Holland 	Boston Celtics 	30.0 	SG 	27.0 	6-5 	205.0 	Boston University 	NaN 	92.98636
+
+nba["Salary"].div(1000000)
+
+nba["Salary in millions"] = nba["Salary"] / 1000000
+
+nba.head(3)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary 	weight in Kilograms 	Salary in millions
+0 	Avery Bradley 	Boston Celtics 	0.0 	PG 	25.0 	6-2 	180.0 	Texas 	7730337.0 	81.64656 	7.730337
+1 	Jae Crowder 	Boston Celtics 	99.0 	SF 	25.0 	6-6 	235.0 	Marquette 	6796117.0 	106.59412 	6.796117
+2 	John Holland 	Boston Celtics 	30.0 	SG 	27.0 	6-5 	205.0 	Boston University 	NaN 	92.98636 	NaN
+
+A Review of .value_counts() Method
+
+nba = pd.read_csv("nba.csv")
+
+nba.head(3)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+0 	Avery Bradley 	Boston Celtics 	0.0 	PG 	25.0 	6-2 	180.0 	Texas 	7730337.0
+1 	Jae Crowder 	Boston Celtics 	99.0 	SF 	25.0 	6-6 	235.0 	Marquette 	6796117.0
+2 	John Holland 	Boston Celtics 	30.0 	SG 	27.0 	6-5 	205.0 	Boston University 	NaN
+
+nba["Team"].value_counts()
+
+​
+
+nba["Position"].value_counts().head(1)
+
+​
+
+nba["Weight"].value_counts().tail()
+
+nba["Salary"].value_counts()
+
+Drop Rows with Null Values
+
+nba = pd.read_csv("nba.csv")
+
+nba.head(3)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+0 	Avery Bradley 	Boston Celtics 	0.0 	PG 	25.0 	6-2 	180.0 	Texas 	7730337.0
+1 	Jae Crowder 	Boston Celtics 	99.0 	SF 	25.0 	6-6 	235.0 	Marquette 	6796117.0
+2 	John Holland 	Boston Celtics 	30.0 	SG 	27.0 	6-5 	205.0 	Boston University 	NaN
+
+nba.dropna()  # it removes any rows from dataframe where there is one or more null values 
+
+​
+
+nba.dropna(how="all", inplace = True)
+
+nba.dropna(axis = "columns")
+
+​
+
+​
+
+nba.head(3)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+0 	Avery Bradley 	Boston Celtics 	0.0 	PG 	25.0 	6-2 	180.0 	Texas 	7730337.0
+1 	Jae Crowder 	Boston Celtics 	99.0 	SF 	25.0 	6-6 	235.0 	Marquette 	6796117.0
+2 	John Holland 	Boston Celtics 	30.0 	SG 	27.0 	6-5 	205.0 	Boston University 	NaN
+
+nba.dropna(subset = ["Salary","College"])
+
+Fill in Null Values with the .fillna() Method
+
+nba = pd.read_csv("nba.csv")
+
+nba.head(3)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+0 	Avery Bradley 	Boston Celtics 	0.0 	PG 	25.0 	6-2 	180.0 	Texas 	7730337.0
+1 	Jae Crowder 	Boston Celtics 	99.0 	SF 	25.0 	6-6 	235.0 	Marquette 	6796117.0
+2 	John Holland 	Boston Celtics 	30.0 	SG 	27.0 	6-5 	205.0 	Boston University 	NaN
+
+nba.fillna(0)
+
+nba["Salary"].fillna(0, inplace = True)
+
+nba.head(5)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+0 	Avery Bradley 	Boston Celtics 	0.0 	PG 	25.0 	6-2 	180.0 	Texas 	7730337.0
+1 	Jae Crowder 	Boston Celtics 	99.0 	SF 	25.0 	6-6 	235.0 	Marquette 	6796117.0
+2 	John Holland 	Boston Celtics 	30.0 	SG 	27.0 	6-5 	205.0 	Boston University 	0.0
+3 	R.J. Hunter 	Boston Celtics 	28.0 	SG 	22.0 	6-5 	185.0 	Georgia State 	1148640.0
+4 	Jonas Jerebko 	Boston Celtics 	8.0 	PF 	29.0 	6-10 	231.0 	NaN 	5000000.0
+
+nba["College"].fillna("No College", inplace = True)
+
+nba.head()
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+0 	Avery Bradley 	Boston Celtics 	0.0 	PG 	25.0 	6-2 	180.0 	Texas 	7730337.0
+1 	Jae Crowder 	Boston Celtics 	99.0 	SF 	25.0 	6-6 	235.0 	Marquette 	6796117.0
+2 	John Holland 	Boston Celtics 	30.0 	SG 	27.0 	6-5 	205.0 	Boston University 	0.0
+3 	R.J. Hunter 	Boston Celtics 	28.0 	SG 	22.0 	6-5 	185.0 	Georgia State 	1148640.0
+4 	Jonas Jerebko 	Boston Celtics 	8.0 	PF 	29.0 	6-10 	231.0 	No College 	5000000.0
+
+​
+
+​
+
+​
+
+​
+
+​
+

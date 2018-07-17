@@ -1,0 +1,102 @@
+
+Jupyter Notebook
+Series 
+
+
+# list 
+
+fruits_list= ["Apple","Banana","Orange","Grapes"]
+
+# creating series using list of srings
+
+pd.Series(fruits_list)
+
+0     Apple
+1    Banana
+2    Orange
+3    Grapes
+dtype: object
+
+randomnumbers = [4,6,8,10,43,68]
+pd.Series(randomnumbers)
+
+0     4
+1     6
+2     8
+3    10
+4    43
+5    68
+dtype: int64
+
+booleansvalues = [True,False,True,False,True]
+pd.Series(booleansvalues)
+
+0     True
+1    False
+2     True
+3    False
+4     True
+dtype: bool
+
+# creating a sample dictionary 
+sample_dictionary = {"Elephant": "Animal",
+
+             "Apple" : "A Fruit",
+
+              "Green" : "A Color"}
+
+
+# creting a series using dictionary
+pd.Series(sample_dictionary) 
+
+Apple       A Fruit
+Elephant     Animal
+Green       A Color
+dtype: object
+
+Introduction to Attributes , attributes returns the information about the objects , attributes don't modify objects
+
+sample_list = ["data","analytics","maths","stats","algorithms"]
+
+
+
+pd.Series(sample_list)
+
+0          data
+1     analytics
+2         maths
+3         stats
+4    algorithms
+dtype: object
+
+when pandas executing a last line , while giving us a series it's not actually saving in memory once it preview to us on the screen since not being stored in a variable , its discorded from memory. In order to use and reference to series later will have to store a variable , to do that you need to assign the series to variable using equals (=)
+
+Ex: p = pd.Series(sample_list)
+
+p = pd.Series(sample_list) # series is stored in variale p
+
+p   # you can execute the variable p , inorder to see the results 
+
+0          data
+1     analytics
+2         maths
+3         stats
+4    algorithms
+dtype: object
+
+p.values  #  values is an attribute , it will return an array with all of the values in the series , values attribute not changing or manipulating
+
+              or shuffling anyting , it just returns the values from th series in the from of array 
+
+array(['data', 'analytics', 'maths', 'stats', 'algorithms'], dtype=object)
+
+p.index    # it will gives the details about start and stop index details
+
+RangeIndex(start=0, stop=5, step=1)
+
+p.dtype   # dtype is an attribute.  it will give us dtype og 'O' , which a short form of Object , internal pandas lingo for string 
+
+dtype('O')
+
+
+
