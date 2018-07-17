@@ -1,0 +1,228 @@
+
+
+?
+
+ #  The .astype() Method,  which allows to convert the datatype of series from one to anohter.
+
+import pandas as pd
+
+?
+
+?
+
+nba = pd.read_csv("nba.csv")
+
+nba.tail(3)
+
+?
+
+?
+
+nba = pd.read_csv("nba.csv").dropna(how = "all")
+
+nba["Salary"].fillna(0,inplace =True)
+
+nba["College"].fillna("None", inplace = True)
+
+nba.head(6)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+0 	Avery Bradley 	Boston Celtics 	0.0 	PG 	25.0 	6-2 	180.0 	Texas 	7730337.0
+1 	Jae Crowder 	Boston Celtics 	99.0 	SF 	25.0 	6-6 	235.0 	Marquette 	6796117.0
+2 	John Holland 	Boston Celtics 	30.0 	SG 	27.0 	6-5 	205.0 	Boston University 	0.0
+3 	R.J. Hunter 	Boston Celtics 	28.0 	SG 	22.0 	6-5 	185.0 	Georgia State 	1148640.0
+4 	Jonas Jerebko 	Boston Celtics 	8.0 	PF 	29.0 	6-10 	231.0 	None 	5000000.0
+5 	Amir Johnson 	Boston Celtics 	90.0 	PF 	29.0 	6-9 	240.0 	None 	12000000.0
+
+nba.dtypes
+
+?
+
+nba.info()
+
+?
+
+<class 'pandas.core.frame.DataFrame'>
+Int64Index: 457 entries, 0 to 456
+Data columns (total 9 columns):
+Name        457 non-null object
+Team        457 non-null category
+Number      457 non-null int32
+Position    457 non-null category
+Age         457 non-null int32
+Height      457 non-null object
+Weight      457 non-null float64
+College     457 non-null object
+Salary      457 non-null int32
+dtypes: category(2), float64(1), int32(3), object(3)
+memory usage: 35.7+ KB
+
+nba["Salary"] = nba["Salary"].astype("int")
+
+nba.head(3)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+0 	Avery Bradley 	Boston Celtics 	0.0 	PG 	25.0 	6-2 	180.0 	Texas 	7730337
+1 	Jae Crowder 	Boston Celtics 	99.0 	SF 	25.0 	6-6 	235.0 	Marquette 	6796117
+2 	John Holland 	Boston Celtics 	30.0 	SG 	27.0 	6-5 	205.0 	Boston University 	0
+
+nba["Age"] = nba["Age"].astype("int")
+
+nba["Number"] = nba["Number"].astype("int")
+
+?
+
+nba.head(3)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+0 	Avery Bradley 	Boston Celtics 	0 	PG 	25 	6-2 	180.0 	Texas 	7730337
+1 	Jae Crowder 	Boston Celtics 	99 	SF 	25 	6-6 	235.0 	Marquette 	6796117
+2 	John Holland 	Boston Celtics 	30 	SG 	27 	6-5 	205.0 	Boston University 	0
+
+# category is datatype in pandas , which is ideal when you small number of uniwue values and a dataframe
+
+nba["Position"].nunique()
+
+5
+
+nba["Position"] = nba["Position"].astype("category")
+
+nba["Team"] = nba["Team"].astype("category")
+
+?
+
+nba.head()
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+0 	Avery Bradley 	Boston Celtics 	0 	PG 	25 	6-2 	180.0 	Texas 	7730337
+1 	Jae Crowder 	Boston Celtics 	99 	SF 	25 	6-6 	235.0 	Marquette 	6796117
+2 	John Holland 	Boston Celtics 	30 	SG 	27 	6-5 	205.0 	Boston University 	0
+3 	R.J. Hunter 	Boston Celtics 	28 	SG 	22 	6-5 	185.0 	Georgia State 	1148640
+4 	Jonas Jerebko 	Boston Celtics 	8 	PF 	29 	6-10 	231.0 	None 	5000000
+
+?
+
+ Sort a DataFrame with the .sort_values() method
+
+nba = pd.read_csv("nba.csv")
+
+nba.head(3)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+0 	Avery Bradley 	Boston Celtics 	0.0 	PG 	25.0 	6-2 	180.0 	Texas 	7730337.0
+1 	Jae Crowder 	Boston Celtics 	99.0 	SF 	25.0 	6-6 	235.0 	Marquette 	6796117.0
+2 	John Holland 	Boston Celtics 	30.0 	SG 	27.0 	6-5 	205.0 	Boston University 	NaN
+
+nba.sort_values("Name", ascending = False)
+
+?
+
+nba.sort_values("Age", ascending = False)
+
+?
+
+nba.sort_values("Salary", ascending = False , inplace =True)
+
+nba.head(3)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+109 	Kobe Bryant 	Los Angeles Lakers 	24.0 	SF 	37.0 	6-6 	212.0 	NaN 	25000000.0
+169 	LeBron James 	Cleveland Cavaliers 	23.0 	SF 	31.0 	6-8 	250.0 	NaN 	22970500.0
+33 	Carmelo Anthony 	New York Knicks 	7.0 	SF 	32.0 	6-8 	240.0 	Syracuse 	22875000.0
+
+nba.sort_values("Salary", na_position= "first")
+
+?
+
+nba.sort_values("Salary", ascending = False, na_position= "first")
+
+nba.sort_values("Salary", ascending = False, na_position= "first").tail(3)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+291 	Orlando Johnson 	New Orleans Pelicans 	0.0 	SG 	27.0 	6-5 	220.0 	UC Santa Barbara 	55722.0
+130 	Phil Pressey 	Phoenix Suns 	25.0 	PG 	25.0 	5-11 	175.0 	Missouri 	55722.0
+32 	Thanasis Antetokounmpo 	New York Knicks 	43.0 	SF 	23.0 	6-7 	205.0 	NaN 	30888.0
+
+Sort a DatsFrame with the .sort_values() method,
+
+nba = pd.read_csv("nba.csv")
+
+nba.head(3)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+0 	Avery Bradley 	Boston Celtics 	0.0 	PG 	25.0 	6-2 	180.0 	Texas 	7730337.0
+1 	Jae Crowder 	Boston Celtics 	99.0 	SF 	25.0 	6-6 	235.0 	Marquette 	6796117.0
+2 	John Holland 	Boston Celtics 	30.0 	SG 	27.0 	6-5 	205.0 	Boston University 	NaN
+
+nba.sort_values(["Team","Name"])
+
+nba.sort_values(["Team","Name"], ascending = False) 
+
+nba.sort_values(["Team","Name"], ascending = [True, False], inplace = True)
+
+?
+
+nba.head(3)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+322 	Walter Tavares 	Atlanta Hawks 	22.0 	C 	24.0 	7-3 	260.0 	NaN 	1000000.0
+310 	Tim Hardaway Jr. 	Atlanta Hawks 	10.0 	SG 	24.0 	6-6 	205.0 	Michigan 	1304520.0
+321 	Tiago Splitter 	Atlanta Hawks 	11.0 	C 	31.0 	6-11 	245.0 	NaN 	9756250.0
+
+ Sort DataFreame with the .sort_index() method
+
+nba = pd.read_csv("nba.csv")
+
+nba.head(3)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+0 	Avery Bradley 	Boston Celtics 	0.0 	PG 	25.0 	6-2 	180.0 	Texas 	7730337.0
+1 	Jae Crowder 	Boston Celtics 	99.0 	SF 	25.0 	6-6 	235.0 	Marquette 	6796117.0
+2 	John Holland 	Boston Celtics 	30.0 	SG 	27.0 	6-5 	205.0 	Boston University 	NaN
+
+nba.sort_values(["Number","Salary","Name"], inplace = True)
+
+nba.head(3)
+
+nba.tail(3)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+68 	Lucas Nogueira 	Toronto Raptors 	92.0 	C 	23.0 	7-0 	220.0 	NaN 	1842000.0
+1 	Jae Crowder 	Boston Celtics 	99.0 	SF 	25.0 	6-6 	235.0 	Marquette 	6796117.0
+457 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN
+
+nba.sort_index(ascending = False, inplace = True)
+
+nba.head(3)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+457 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN
+456 	Jeff Withey 	Utah Jazz 	24.0 	C 	26.0 	7-0 	231.0 	Kansas 	947276.0
+455 	Tibor Pleiss 	Utah Jazz 	21.0 	C 	26.0 	7-3 	256.0 	NaN 	2900000.0
+
+Rank values with the .rank() method
+
+nba = pd.read_csv("nba.csv").dropna(how="all")
+
+nba["Salary"] = nba["Salary"].fillna(0).astype("int")
+
+nba.head(3)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary
+0 	Avery Bradley 	Boston Celtics 	0.0 	PG 	25.0 	6-2 	180.0 	Texas 	7730337
+1 	Jae Crowder 	Boston Celtics 	99.0 	SF 	25.0 	6-6 	235.0 	Marquette 	6796117
+2 	John Holland 	Boston Celtics 	30.0 	SG 	27.0 	6-5 	205.0 	Boston University 	0
+
+nba["Salary Rank"] = nba["Salary"].rank(ascending = False).astype("int")
+
+nba.head(3)
+
+	Name 	Team 	Number 	Position 	Age 	Height 	Weight 	College 	Salary 	Salary Rank
+0 	Avery Bradley 	Boston Celtics 	0.0 	PG 	25.0 	6-2 	180.0 	Texas 	7730337 	97
+1 	Jae Crowder 	Boston Celtics 	99.0 	SF 	25.0 	6-6 	235.0 	Marquette 	6796117 	110
+2 	John Holland 	Boston Celtics 	30.0 	SG 	27.0 	6-5 	205.0 	Boston University 	0 	452
+
+nba.sort_values(by = "Salary", ascending = False)
+
+?
+
