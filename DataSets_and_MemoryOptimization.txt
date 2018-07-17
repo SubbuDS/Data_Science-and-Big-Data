@@ -1,0 +1,460 @@
+
+
+DataSet and Memory Optimization
+
+import pandas as pd
+
+?
+
+df = pd.read_csv("employees.csv")
+
+?
+
+df = pd.read_csv("employees.csv", parse_dates=["Start Date","Last Login Time"])
+
+?
+
+df["Senior Management"] = df["Senior Management"].astype("bool")
+
+df["Gender"] = df["Gender"].astype("category")
+
+df.head(3)
+
+?
+
+?
+
+	First Name 	Gender 	Start Date 	Last Login Time 	Salary 	Bonus % 	Senior Management 	Team
+0 	Douglas 	Male 	1993-08-06 	2018-07-17 12:42:00 	97308 	6.945 	True 	Marketing
+1 	Thomas 	Male 	1996-03-31 	2018-07-17 06:53:00 	61933 	4.170 	True 	NaN
+2 	Maria 	Female 	1993-04-23 	2018-07-17 11:17:00 	130590 	11.858 	False 	Finance
+
+df["Start Date"].head(3)
+
+0     8/6/1993
+1    3/31/1996
+2    4/23/1993
+Name: Start Date, dtype: object
+
+df.info()
+
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 1000 entries, 0 to 999
+Data columns (total 8 columns):
+First Name           933 non-null object
+Gender               855 non-null category
+Start Date           1000 non-null datetime64[ns]
+Last Login Time      1000 non-null datetime64[ns]
+Salary               1000 non-null int64
+Bonus %              1000 non-null float64
+Senior Management    1000 non-null bool
+Team                 957 non-null object
+dtypes: bool(1), category(1), datetime64[ns](2), float64(1), int64(1), object(2)
+memory usage: 41.1+ KB
+
+pd.to_datetime(df["Start Date"])
+
+?
+
+df["Start Date"] = pd.to_datetime(df["Start Date"])
+
+df["Last Login Time"].head(3)
+
+0    12:42 PM
+1     6:53 AM
+2    11:17 AM
+Name: Last Login Time, dtype: object
+
+df["Last Login Time"] = pd.to_datetime(df["Last Login Time"])
+
+df["Senior Management"] = df["Senior Management"].astype("bool")
+
+df["Gender"] = df["Gender"].astype("category")
+
+df.info()
+
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 1000 entries, 0 to 999
+Data columns (total 8 columns):
+First Name           933 non-null object
+Gender               855 non-null category
+Start Date           1000 non-null datetime64[ns]
+Last Login Time      1000 non-null datetime64[ns]
+Salary               1000 non-null int64
+Bonus %              1000 non-null float64
+Senior Management    1000 non-null bool
+Team                 957 non-null object
+dtypes: bool(1), category(1), datetime64[ns](2), float64(1), int64(1), object(2)
+memory usage: 41.1+ KB
+
+Filter Data frame based on Condition 
+
+df = pd.read_csv("employees.csv", parse_dates=["Start Date","Last Login Time"])
+
+?
+
+df["Senior Management"] = df["Senior Management"].astype("bool")
+
+df["Gender"] = df["Gender"].astype("category")
+
+df.head(3)
+
+	First Name 	Gender 	Start Date 	Last Login Time 	Salary 	Bonus % 	Senior Management 	Team
+0 	Douglas 	Male 	1993-08-06 	2018-07-17 12:42:00 	97308 	6.945 	True 	Marketing
+1 	Thomas 	Male 	1996-03-31 	2018-07-17 06:53:00 	61933 	4.170 	True 	NaN
+2 	Maria 	Female 	1993-04-23 	2018-07-17 11:17:00 	130590 	11.858 	False 	Finance
+
+df[df["Gender"] == "Male"]
+
+df["Team"] == "Finance"
+
+?
+
+df[df["Team"] == "Finance"]
+
+mask = df["Team"] == "Finance"
+
+?
+
+df[mask]
+
+df[df["Senior Management"]]
+
+mask = df["Team"] != "Marketing"
+
+df[mask]
+
+df["Salary"] > 110000
+
+?
+
+df[df["Salary"] > 110000]
+
+?
+
+df["Bonus %"] < 1.5
+
+?
+
+df[df["Bonus %"] < 1.5]
+
+mask = df["Start Date"] <= "1985-01-01"
+
+?
+
+df[mask]
+
+Filter with more than one condition(AND)
+
+df = pd.read_csv("employees.csv", parse_dates=["Start Date","Last Login Time"])
+
+?
+
+df["Senior Management"] = df["Senior Management"].astype("bool")
+
+df["Gender"] = df["Gender"].astype("category")
+
+df.head(3)
+
+	First Name 	Gender 	Start Date 	Last Login Time 	Salary 	Bonus % 	Senior Management 	Team
+0 	Douglas 	Male 	1993-08-06 	2018-07-17 12:42:00 	97308 	6.945 	True 	Marketing
+1 	Thomas 	Male 	1996-03-31 	2018-07-17 06:53:00 	61933 	4.170 	True 	NaN
+2 	Maria 	Female 	1993-04-23 	2018-07-17 11:17:00 	130590 	11.858 	False 	Finance
+
+mask1 = df["Gender"] == "Male"
+
+df[mask1]
+
+?
+
+mask2 = df["Team"] == "Marketing"
+
+?
+
+df[mask1 & mask2]
+
+Filter with more than one condition(OR)
+
+df = pd.read_csv("employees.csv", parse_dates=["Start Date","Last Login Time"])
+
+?
+
+df["Senior Management"] = df["Senior Management"].astype("bool")
+
+df["Gender"] = df["Gender"].astype("category")
+
+df.head(3)
+
+	First Name 	Gender 	Start Date 	Last Login Time 	Salary 	Bonus % 	Senior Management 	Team
+0 	Douglas 	Male 	1993-08-06 	2018-07-17 12:42:00 	97308 	6.945 	True 	Marketing
+1 	Thomas 	Male 	1996-03-31 	2018-07-17 06:53:00 	61933 	4.170 	True 	NaN
+2 	Maria 	Female 	1993-04-23 	2018-07-17 11:17:00 	130590 	11.858 	False 	Finance
+
+mask1 = df["Senior Management"] 
+
+mask2 = df["Start Date"] < "1990-01-01"
+
+?
+
+df[mask1 | mask2]
+
+mask1 = df["First Name"] == "Robert"
+
+?
+
+mask2 = df["Team"] == "Client Services"
+
+?
+
+mask3 = df["Start Date"] > "2016-06-01"
+
+?
+
+df[(mask1 & mask2) |  mask3]
+
+	First Name 	Gender 	Start Date 	Last Login Time 	Salary 	Bonus % 	Senior Management 	Team
+15 	Lillian 	Female 	2016-06-05 	2018-07-17 06:09:00 	59414 	1.256 	False 	Product
+98 	Tina 	Female 	2016-06-16 	2018-07-17 19:47:00 	100705 	16.961 	True 	Marketing
+387 	Robert 	Male 	1994-10-29 	2018-07-17 04:26:00 	123294 	19.894 	False 	Client Services
+451 	Terry 	NaN 	2016-07-15 	2018-07-17 00:29:00 	140002 	19.490 	True 	Marketing
+
+The .isin() method
+
+df = pd.read_csv("employees.csv", parse_dates=["Start Date","Last Login Time"])
+
+?
+
+df["Senior Management"] = df["Senior Management"].astype("bool")
+
+df["Gender"] = df["Gender"].astype("category")
+
+df.head(3)
+
+	First Name 	Gender 	Start Date 	Last Login Time 	Salary 	Bonus % 	Senior Management 	Team
+0 	Douglas 	Male 	1993-08-06 	2018-07-17 12:42:00 	97308 	6.945 	True 	Marketing
+1 	Thomas 	Male 	1996-03-31 	2018-07-17 06:53:00 	61933 	4.170 	True 	NaN
+2 	Maria 	Female 	1993-04-23 	2018-07-17 11:17:00 	130590 	11.858 	False 	Finance
+
+mask1 = df["Team"] == "Legal"
+
+mask2 = df["Team"] == "Sales"
+
+mask3 = df["Team"] == "Product"
+
+?
+
+df[mask1 | mask2| mask3]
+
+mask = df["Team"].isin(["Product","Marketing"])
+
+?
+
+df[mask]
+
+The .isnull() or .notnull() methods
+
+df = pd.read_csv("employees.csv", parse_dates=["Start Date","Last Login Time"])
+
+?
+
+df["Senior Management"] = df["Senior Management"].astype("bool")
+
+df["Gender"] = df["Gender"].astype("category")
+
+df.head(3)
+
+	First Name 	Gender 	Start Date 	Last Login Time 	Salary 	Bonus % 	Senior Management 	Team
+0 	Douglas 	Male 	1993-08-06 	2018-07-17 12:42:00 	97308 	6.945 	True 	Marketing
+1 	Thomas 	Male 	1996-03-31 	2018-07-17 06:53:00 	61933 	4.170 	True 	NaN
+2 	Maria 	Female 	1993-04-23 	2018-07-17 11:17:00 	130590 	11.858 	False 	Finance
+
+mask = df["Team"].isnull()
+
+?
+
+df[mask]
+
+condition = df["Gender"].notnull()
+
+?
+
+df[condition]
+
+the .between() method 
+
+df = pd.read_csv("employees.csv", parse_dates=["Start Date","Last Login Time"])
+
+?
+
+df["Senior Management"] = df["Senior Management"].astype("bool")
+
+df["Gender"] = df["Gender"].astype("category")
+
+df.head(3)
+
+	First Name 	Gender 	Start Date 	Last Login Time 	Salary 	Bonus % 	Senior Management 	Team
+0 	Douglas 	Male 	1993-08-06 	2018-07-17 12:42:00 	97308 	6.945 	True 	Marketing
+1 	Thomas 	Male 	1996-03-31 	2018-07-17 06:53:00 	61933 	4.170 	True 	NaN
+2 	Maria 	Female 	1993-04-23 	2018-07-17 11:17:00 	130590 	11.858 	False 	Finance
+
+df[df["Salary"].between(60000,70000)]
+
+df[df["Bonus %"].between(2.0,5.0)]
+
+df[df["Start Date"].between("1991-01-01" , "1992-01-01")]
+
+df[df["Last Login Time"].between("8:30AM","12:00PM")]
+
+The .dupicated() method
+
+df = pd.read_csv("employees.csv", parse_dates=["Start Date","Last Login Time"])
+
+?
+
+df["Senior Management"] = df["Senior Management"].astype("bool")
+
+df["Gender"] = df["Gender"].astype("category")
+
+df.head(3)
+
+	First Name 	Gender 	Start Date 	Last Login Time 	Salary 	Bonus % 	Senior Management 	Team
+0 	Douglas 	Male 	1993-08-06 	2018-07-17 12:42:00 	97308 	6.945 	True 	Marketing
+1 	Thomas 	Male 	1996-03-31 	2018-07-17 06:53:00 	61933 	4.170 	True 	NaN
+2 	Maria 	Female 	1993-04-23 	2018-07-17 11:17:00 	130590 	11.858 	False 	Finance
+
+df.sort_values("First Name", inplace = True)
+
+df.head(3)
+
+	First Name 	Gender 	Start Date 	Last Login Time 	Salary 	Bonus % 	Senior Management 	Team
+101 	Aaron 	Male 	2012-02-17 	2018-07-17 10:20:00 	61602 	11.849 	True 	Marketing
+327 	Aaron 	Male 	1994-01-29 	2018-07-17 18:48:00 	58755 	5.097 	True 	Marketing
+440 	Aaron 	Male 	1990-07-22 	2018-07-17 14:53:00 	52119 	11.343 	True 	Client Services
+
+df[df["First Name"].duplicated()]
+
+?
+
+df[df["First Name"].duplicated(keep = "last")]
+
+?
+
+df[df["First Name"].duplicated(keep = False)]
+
+?
+
+mask = ~df["First Name"].duplicated(keep = False)
+
+?
+
+df[mask]
+
+The .drop_duplicates() Method 
+
+df = pd.read_csv("employees.csv", parse_dates=["Start Date","Last Login Time"])
+
+?
+
+df["Senior Management"] = df["Senior Management"].astype("bool")
+
+df["Gender"] = df["Gender"].astype("category")
+
+df.sort_values("First Name", inplace = True)
+
+df.head(3)
+
+	First Name 	Gender 	Start Date 	Last Login Time 	Salary 	Bonus % 	Senior Management 	Team
+101 	Aaron 	Male 	2012-02-17 	2018-07-17 10:20:00 	61602 	11.849 	True 	Marketing
+327 	Aaron 	Male 	1994-01-29 	2018-07-17 18:48:00 	58755 	5.097 	True 	Marketing
+440 	Aaron 	Male 	1990-07-22 	2018-07-17 14:53:00 	52119 	11.343 	True 	Client Services
+
+len(df)
+
+1000
+
+len(df.drop_duplicates())
+
+1000
+
+df.drop_duplicates(subset = ["First Name"],keep = "first")
+
+?
+
+df.drop_duplicates(subset = ["First Name"],keep = "last")
+
+?
+
+df.drop_duplicates(subset = ["First Name"],keep = False)
+
+df.drop_duplicates(subset =["First Name", "Team"], inplace = True)
+
+df.head(2)
+
+	First Name 	Gender 	Start Date 	Last Login Time 	Salary 	Bonus % 	Senior Management 	Team
+101 	Aaron 	Male 	2012-02-17 	2018-07-17 10:20:00 	61602 	11.849 	True 	Marketing
+440 	Aaron 	Male 	1990-07-22 	2018-07-17 14:53:00 	52119 	11.343 	True 	Client Services
+
+len(df)
+
+769
+
+The .unique() and .nunique() Methods 
+
+?
+
+df = pd.read_csv("employees.csv", parse_dates=["Start Date","Last Login Time"])
+
+?
+
+df["Senior Management"] = df["Senior Management"].astype("bool")
+
+df["Gender"] = df["Gender"].astype("category")
+
+df.head(3)
+
+	First Name 	Gender 	Start Date 	Last Login Time 	Salary 	Bonus % 	Senior Management 	Team
+0 	Douglas 	Male 	1993-08-06 	2018-07-17 12:42:00 	97308 	6.945 	True 	Marketing
+1 	Thomas 	Male 	1996-03-31 	2018-07-17 06:53:00 	61933 	4.170 	True 	NaN
+2 	Maria 	Female 	1993-04-23 	2018-07-17 11:17:00 	130590 	11.858 	False 	Finance
+
+df["Gender"].unique()
+
+[Male, Female, NaN]
+Categories (2, object): [Male, Female]
+
+df["Team"].unique()
+
+array(['Marketing', nan, 'Finance', 'Client Services', 'Legal', 'Product',
+       'Engineering', 'Business Development', 'Human Resources', 'Sales',
+       'Distribution'], dtype=object)
+
+1
+
+len(df["Team"].unique())
+
+11
+
+df["Team"].nunique()    # df["Team"].nunique(dropna = True)
+
+10
+
+df["Team"].nunique(dropna = False)
+
+11
+
+?
+
+?
+
+?
+
+?
+
+?
+
+?
+
+?
+
+?
+
