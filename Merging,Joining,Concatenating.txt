@@ -1,0 +1,644 @@
+
+
+
+
+
+import pandas as pd
+
+week1 = pd.read_csv("Restaurant - Week 1 Sales.csv")
+
+week2 = pd.read_csv("Restaurant - Week 2 Sales.csv")
+
+customers = pd.read_csv("Restaurant - Customers.csv")
+
+foods = pd.read_csv("Restaurant - Foods.csv")
+
+The pd.concat() Method
+
+len(week1)
+
+250
+
+len(week2)
+
+250
+
+pd.concat([week1,week2], ignore_index = True)
+
+	Customer ID 	Food ID
+0 	537 	9
+1 	97 	4
+2 	658 	1
+3 	202 	2
+4 	155 	9
+5 	213 	8
+6 	600 	1
+7 	503 	5
+8 	71 	3
+9 	174 	3
+10 	961 	9
+11 	966 	5
+12 	641 	4
+13 	288 	2
+14 	149 	4
+15 	954 	2
+16 	147 	9
+17 	155 	1
+18 	550 	6
+19 	101 	7
+20 	549 	6
+21 	75 	6
+22 	78 	7
+23 	514 	5
+24 	833 	7
+25 	329 	8
+26 	586 	10
+27 	341 	1
+28 	519 	10
+29 	680 	9
+... 	... 	...
+470 	495 	2
+471 	794 	6
+472 	734 	10
+473 	540 	3
+474 	735 	2
+475 	940 	8
+476 	571 	7
+477 	888 	2
+478 	664 	6
+479 	343 	7
+480 	143 	4
+481 	505 	3
+482 	54 	8
+483 	959 	2
+484 	367 	8
+485 	883 	8
+486 	251 	9
+487 	855 	4
+488 	233 	3
+489 	559 	10
+490 	734 	1
+491 	677 	3
+492 	276 	4
+493 	45 	8
+494 	945 	4
+495 	783 	10
+496 	556 	10
+497 	547 	9
+498 	252 	9
+499 	249 	6
+
+500 rows × 2 columns
+
+len(pd.concat([week1,week2]))
+
+500
+
+sales = pd.concat([week1,week2], keys = ["A","B"])
+
+sales.ix[("B", 240)]
+
+Customer ID    734
+Food ID          1
+Name: (B, 240), dtype: int64
+
+sales.ix[("B", 240), "Customer ID"]
+
+734
+
+The .append() Method on DataFrame
+
+sales = week2.append(week1, ignore_index = True)
+
+sales
+
+	Customer ID 	Food ID
+0 	688 	10
+1 	813 	7
+2 	495 	10
+3 	189 	5
+4 	267 	3
+5 	310 	5
+6 	761 	2
+7 	443 	5
+8 	729 	9
+9 	741 	8
+10 	847 	6
+11 	156 	10
+12 	550 	7
+13 	620 	10
+14 	272 	4
+15 	511 	2
+16 	8 	6
+17 	534 	7
+18 	909 	6
+19 	732 	9
+20 	372 	4
+21 	713 	1
+22 	496 	3
+23 	381 	9
+24 	13 	2
+25 	101 	4
+26 	325 	7
+27 	674 	2
+28 	564 	8
+29 	578 	5
+... 	... 	...
+470 	147 	8
+471 	745 	4
+472 	184 	3
+473 	828 	8
+474 	578 	5
+475 	491 	4
+476 	62 	4
+477 	77 	9
+478 	506 	9
+479 	271 	9
+480 	584 	10
+481 	148 	5
+482 	595 	3
+483 	274 	10
+484 	646 	1
+485 	520 	8
+486 	644 	8
+487 	725 	8
+488 	934 	4
+489 	151 	10
+490 	945 	5
+491 	343 	3
+492 	380 	9
+493 	911 	4
+494 	621 	9
+495 	413 	9
+496 	926 	6
+497 	134 	3
+498 	396 	6
+499 	535 	10
+
+500 rows × 2 columns
+
+?
+
+Inner Joins in Pandas
+
+week1.head(2)
+
+	Customer ID 	Food ID
+0 	537 	9
+1 	97 	4
+
+week2.head(2)
+
+	Customer ID 	Food ID
+0 	688 	10
+1 	813 	7
+
+week1.merge(week2, how = "inner", on = "Customer ID", suffixes = [" - A"," - B"])
+
+	Customer ID 	Food ID - A 	Food ID - B
+0 	537 	9 	5
+1 	155 	9 	3
+2 	155 	1 	3
+3 	503 	5 	8
+4 	503 	5 	9
+5 	550 	6 	7
+6 	101 	7 	4
+7 	75 	6 	4
+8 	77 	1 	7
+9 	77 	9 	7
+10 	77 	2 	7
+11 	77 	9 	7
+12 	628 	4 	7
+13 	798 	9 	5
+14 	798 	1 	5
+15 	462 	3 	8
+16 	304 	3 	3
+17 	304 	2 	3
+18 	189 	4 	5
+19 	799 	8 	7
+20 	30 	2 	4
+21 	249 	9 	6
+22 	677 	10 	3
+23 	741 	3 	8
+24 	540 	3 	3
+25 	819 	4 	5
+26 	937 	10 	10
+27 	937 	10 	2
+28 	233 	3 	3
+29 	21 	4 	4
+... 	... 	... 	...
+32 	816 	7 	2
+33 	761 	9 	2
+34 	761 	9 	3
+35 	80 	2 	4
+36 	479 	6 	3
+37 	922 	1 	1
+38 	922 	1 	2
+39 	909 	1 	6
+40 	909 	4 	6
+41 	919 	10 	8
+42 	574 	10 	9
+43 	45 	7 	8
+44 	529 	7 	10
+45 	673 	7 	4
+46 	310 	2 	5
+47 	310 	1 	5
+48 	867 	9 	10
+49 	968 	1 	4
+50 	482 	3 	1
+51 	163 	1 	10
+52 	321 	1 	3
+53 	783 	6 	10
+54 	578 	5 	5
+55 	578 	5 	5
+56 	520 	8 	7
+57 	945 	5 	4
+58 	343 	3 	5
+59 	343 	3 	2
+60 	343 	3 	7
+61 	621 	9 	6
+
+62 rows × 3 columns
+
+week1[week1["Customer ID"] == 155]
+
+	Customer ID 	Food ID
+4 	155 	9
+17 	155 	1
+
+week2[week2["Customer ID"] == 155]
+
+	Customer ID 	Food ID
+208 	155 	3
+
+week1.merge(week2, how = "inner", on = ["Customer ID","Food ID"] )
+
+	Customer ID 	Food ID
+0 	304 	3
+1 	540 	3
+2 	937 	10
+3 	233 	3
+4 	21 	4
+5 	21 	4
+6 	922 	1
+7 	578 	5
+8 	578 	5
+
+week1[week1["Customer ID"] == 578]
+
+	Customer ID 	Food ID
+224 	578 	5
+
+week2[week2["Customer ID"] == 578]  # customer id comes to 2 weeks for food 
+
+	Customer ID 	Food ID
+29 	578 	5
+189 	578 	5
+
+?
+
+Outer Joins
+
+week1.head(2)
+
+	Customer ID 	Food ID
+0 	537 	9
+1 	97 	4
+
+week2.head(2)
+
+	Customer ID 	Food ID
+0 	688 	10
+1 	813 	7
+
+merged = week1.merge(week2, how = "outer", on = "Customer ID", suffixes = [" - week1", " - week2"], indicator = True)
+
+len(week1.merge(week2, how = "outer", on = "Customer ID", suffixes = [" - week1", " - week2"])) # 46 rows identified by both dataframes
+
+454
+
+merged["_merge"].value_counts()
+
+right_only    197
+left_only     195
+both           62
+Name: _merge, dtype: int64
+
+mask = merged["_merge"].isin(["left_only","right_only"])
+
+merged[mask]
+
+?
+
+Left Joins  # it's adds the total dataframe on left side and common data on right side dataframe. Right Join is vise versa 
+
+week1.head(2)
+
+	Customer ID 	Food ID
+0 	537 	9
+1 	97 	4
+
+foods.head(2)
+
+	Food ID 	Food Item 	Price
+0 	1 	Sushi 	3.99
+1 	2 	Burrito 	9.99
+
+week1 = week1.merge(foods, how = "left", on = "Food ID", sort = True)
+
+week1.head()
+
+	Customer ID 	Food ID 	Food Item 	Price
+0 	658 	1 	Sushi 	3.99
+1 	600 	1 	Sushi 	3.99
+2 	155 	1 	Sushi 	3.99
+3 	341 	1 	Sushi 	3.99
+4 	20 	1 	Sushi 	3.99
+
+?
+
+The left_on and right_on Parameters
+
+week2.head(3)
+
+	Customer ID 	Food ID
+0 	688 	10
+1 	813 	7
+2 	495 	10
+
+customers.head(3)
+
+	ID 	First Name 	Last Name 	Gender 	Company 	Occupation
+0 	1 	Joseph 	Perkins 	Male 	Dynazzy 	Community Outreach Specialist
+1 	2 	Jennifer 	Alvarez 	Female 	DabZ 	Senior Quality Engineer
+2 	3 	Roger 	Black 	Male 	Tagfeed 	Account Executive
+
+week2 = week2.merge(customers, how = "left", left_on = "Customer ID", right_on = "ID", sort = True).drop("ID", axis ="columns")
+
+week2.head()
+
+	Customer ID 	Food ID 	First Name 	Last Name 	Gender 	Company 	Occupation
+0 	8 	6 	Frances 	Adams 	Female 	Dabshots 	Developer III
+1 	13 	2 	Ruth 	Alvarez 	Female 	Twitterlist 	Mechanical Systems Engineer
+2 	21 	4 	Albert 	Burns 	Male 	Rhynoodle 	Junior Executive
+3 	24 	8 	Donna 	Thomas 	Female 	Jaxbean 	Chief Design Engineer
+4 	27 	4 	Jessica 	Bennett 	Female 	Twitternation 	Account Executive
+
+?
+
+Merging by Indexes with the left_index and right_index Parameters
+
+customers = pd.read_csv("Restaurant - Customers.csv", index_col = "ID")
+
+foods = pd.read_csv("Restaurant - Foods.csv", index_col = "Food ID")
+
+customers.head(3)
+
+	First Name 	Last Name 	Gender 	Company 	Occupation
+ID 					
+1 	Joseph 	Perkins 	Male 	Dynazzy 	Community Outreach Specialist
+2 	Jennifer 	Alvarez 	Female 	DabZ 	Senior Quality Engineer
+3 	Roger 	Black 	Male 	Tagfeed 	Account Executive
+
+foods.head(3)
+
+	Food Item 	Price
+Food ID 		
+1 	Sushi 	3.99
+2 	Burrito 	9.99
+3 	Taco 	2.99
+
+sales = week1.merge(customers, how = "left", left_on = "Customer ID", right_index = True )
+
+?
+
+sales.merge(foods, how = "left", left_on ="Food ID", right_index= True)
+
+sales.head(3)
+
+	Customer ID 	Food ID 	First Name 	Last Name 	Gender 	Company 	Occupation
+0 	537 	9 	Cheryl 	Carroll 	Female 	Zoombeat 	Registered Nurse
+1 	97 	4 	Amanda 	Watkins 	Female 	Ozu 	Account Coordinator
+2 	658 	1 	Patrick 	Webb 	Male 	Browsebug 	Community Outreach Specialist
+
+week1.head(3)
+
+	Customer ID 	Food ID
+0 	537 	9
+1 	97 	4
+2 	658 	1
+
+week2.head(3)
+
+	Customer ID 	Food ID
+0 	688 	10
+1 	813 	7
+2 	495 	10
+
+week1.merge(week2, how  = "left", left_index = True, right_index = True, suffixes = [" -week1","  - week2"])
+
+	Customer ID -week1 	Food ID -week1 	Customer ID - week2 	Food ID - week2
+0 	537 	9 	688 	10
+1 	97 	4 	813 	7
+2 	658 	1 	495 	10
+3 	202 	2 	189 	5
+4 	155 	9 	267 	3
+5 	213 	8 	310 	5
+6 	600 	1 	761 	2
+7 	503 	5 	443 	5
+8 	71 	3 	729 	9
+9 	174 	3 	741 	8
+10 	961 	9 	847 	6
+11 	966 	5 	156 	10
+12 	641 	4 	550 	7
+13 	288 	2 	620 	10
+14 	149 	4 	272 	4
+15 	954 	2 	511 	2
+16 	147 	9 	8 	6
+17 	155 	1 	534 	7
+18 	550 	6 	909 	6
+19 	101 	7 	732 	9
+20 	549 	6 	372 	4
+21 	75 	6 	713 	1
+22 	78 	7 	496 	3
+23 	514 	5 	381 	9
+24 	833 	7 	13 	2
+25 	329 	8 	101 	4
+26 	586 	10 	325 	7
+27 	341 	1 	674 	2
+28 	519 	10 	564 	8
+29 	680 	9 	578 	5
+... 	... 	... 	... 	...
+220 	147 	8 	495 	2
+221 	745 	4 	794 	6
+222 	184 	3 	734 	10
+223 	828 	8 	540 	3
+224 	578 	5 	735 	2
+225 	491 	4 	940 	8
+226 	62 	4 	571 	7
+227 	77 	9 	888 	2
+228 	506 	9 	664 	6
+229 	271 	9 	343 	7
+230 	584 	10 	143 	4
+231 	148 	5 	505 	3
+232 	595 	3 	54 	8
+233 	274 	10 	959 	2
+234 	646 	1 	367 	8
+235 	520 	8 	883 	8
+236 	644 	8 	251 	9
+237 	725 	8 	855 	4
+238 	934 	4 	233 	3
+239 	151 	10 	559 	10
+240 	945 	5 	734 	1
+241 	343 	3 	677 	3
+242 	380 	9 	276 	4
+243 	911 	4 	45 	8
+244 	621 	9 	945 	4
+245 	413 	9 	783 	10
+246 	926 	6 	556 	10
+247 	134 	3 	547 	9
+248 	396 	6 	252 	9
+249 	535 	10 	249 	6
+
+250 rows × 4 columns
+
+?
+
+The .join() Method
+
+week1 = pd.read_csv("Restaurant - Week 1 Sales.csv")
+
+week2 = pd.read_csv("Restaurant - Week 2 Sales.csv")
+
+customers = pd.read_csv("Restaurant - Customers.csv")
+
+foods = pd.read_csv("Restaurant - Foods.csv")
+
+satisfaction = pd.read_csv("Restaurant - Week 1 Satisfaction.csv")
+
+satisfaction.head(3)
+
+	Satisfaction Rating
+0 	2
+1 	7
+2 	3
+
+week1.merge(satisfaction, how = "left", left_index= True, right_index = True).head()
+
+	Customer ID 	Food ID 	Satisfaction Rating
+0 	537 	9 	2
+1 	97 	4 	7
+2 	658 	1 	3
+3 	202 	2 	7
+4 	155 	9 	10
+
+week1.join(satisfaction).head()
+
+	Customer ID 	Food ID 	Satisfaction Rating
+0 	537 	9 	2
+1 	97 	4 	7
+2 	658 	1 	3
+3 	202 	2 	7
+4 	155 	9 	10
+
+?
+
+The pd.merge() Method
+
+week1 = pd.read_csv("Restaurant - Week 1 Sales.csv")
+
+week2 = pd.read_csv("Restaurant - Week 2 Sales.csv")
+
+customers = pd.read_csv("Restaurant - Customers.csv")
+
+foods = pd.read_csv("Restaurant - Foods.csv")
+
+satisfaction = pd.read_csv("Restaurant - Week 1 Satisfaction.csv")
+
+pd.merge(week1, customers,how = "left", left_on = "Customer ID", right_on ="ID")
+
+	Customer ID 	Food ID 	ID 	First Name 	Last Name 	Gender 	Company 	Occupation
+0 	537 	9 	537 	Cheryl 	Carroll 	Female 	Zoombeat 	Registered Nurse
+1 	97 	4 	97 	Amanda 	Watkins 	Female 	Ozu 	Account Coordinator
+2 	658 	1 	658 	Patrick 	Webb 	Male 	Browsebug 	Community Outreach Specialist
+3 	202 	2 	202 	Louis 	Campbell 	Male 	Rhynoodle 	Account Representative III
+4 	155 	9 	155 	Carolyn 	Diaz 	Female 	Gigazoom 	Database Administrator III
+5 	213 	8 	213 	Keith 	Foster 	Male 	Gigashots 	VP Quality Control
+6 	600 	1 	600 	Sandra 	Bailey 	Female 	Jaxnation 	Sales Associate
+7 	503 	5 	503 	Justin 	Daniels 	Male 	Oloo 	Environmental Tech
+8 	71 	3 	71 	Carolyn 	Reyes 	Female 	Twimbo 	Safety Technician IV
+9 	174 	3 	174 	Anna 	Miller 	Female 	Innojam 	Developer I
+10 	961 	9 	961 	Ralph 	Richards 	Male 	Thoughtstorm 	Accountant I
+11 	966 	5 	966 	Robert 	Ford 	Male 	Jabbertype 	Account Representative IV
+12 	641 	4 	641 	Donna 	Gutierrez 	Female 	Dabtype 	Assistant Professor
+13 	288 	2 	288 	Kenneth 	Jackson 	Male 	Voomm 	Associate Professor
+14 	149 	4 	149 	Jennifer 	Oliver 	Female 	Topiclounge 	Database Administrator III
+15 	954 	2 	954 	Thomas 	Perkins 	Male 	Roodel 	Account Executive
+16 	147 	9 	147 	Theresa 	Morales 	Female 	Abata 	Occupational Therapist
+17 	155 	1 	155 	Carolyn 	Diaz 	Female 	Gigazoom 	Database Administrator III
+18 	550 	6 	550 	Walter 	Miller 	Male 	Yata 	Payment Adjustment Coordinator
+19 	101 	7 	101 	Jeremy 	Nelson 	Male 	Brainlounge 	Web Developer IV
+20 	549 	6 	549 	Harold 	Rivera 	Male 	Topdrive 	Cost Accountant
+21 	75 	6 	75 	Catherine 	Carpenter 	Female 	Zoozzy 	Marketing Manager
+22 	78 	7 	78 	Robert 	Kennedy 	Male 	Edgewire 	Chemical Engineer
+23 	514 	5 	514 	Jack 	Hill 	Male 	Blogtags 	Assistant Professor
+24 	833 	7 	833 	Carolyn 	Dunn 	Female 	Yadel 	Recruiter
+25 	329 	8 	329 	Amanda 	Nguyen 	Female 	Meezzy 	Associate Professor
+26 	586 	10 	586 	Doris 	Mcdonald 	Female 	Youfeed 	Marketing Assistant
+27 	341 	1 	341 	Rachel 	Robinson 	Female 	Twinder 	Safety Technician IV
+28 	519 	10 	519 	Lillian 	Rogers 	Female 	Eazzy 	Paralegal
+29 	680 	9 	680 	Irene 	Gordon 	Female 	Voolith 	Database Administrator II
+... 	... 	... 	... 	... 	... 	... 	... 	...
+220 	147 	8 	147 	Theresa 	Morales 	Female 	Abata 	Occupational Therapist
+221 	745 	4 	745 	Nicole 	Garza 	Female 	Topiczoom 	General Manager
+222 	184 	3 	184 	Jesse 	Edwards 	Male 	Zoombeat 	Administrative Officer
+223 	828 	8 	828 	Mary 	Payne 	Female 	Oyonder 	Assistant Media Planner
+224 	578 	5 	578 	Donald 	Matthews 	Male 	Fiveclub 	Physical Therapy Assistant
+225 	491 	4 	491 	Anna 	Perkins 	Female 	Zazio 	Quality Engineer
+226 	62 	4 	62 	Andrew 	Tucker 	Male 	Leenti 	Structural Analysis Engineer
+227 	77 	9 	77 	Lori 	Edwards 	Female 	Dabvine 	Sales Representative
+228 	506 	9 	506 	Mildred 	Mendoza 	Female 	Vitz 	Environmental Tech
+229 	271 	9 	271 	Beverly 	Ward 	Female 	Brainbox 	Automation Specialist II
+230 	584 	10 	584 	Jeffrey 	Simmons 	Male 	Flipstorm 	Chemical Engineer
+231 	148 	5 	148 	Patricia 	Reid 	Female 	Shuffledrive 	Analog Circuit Design manager
+232 	595 	3 	595 	Bruce 	Kennedy 	Male 	Mydo 	Recruiter
+233 	274 	10 	274 	Gary 	Reid 	Male 	Fivespan 	Executive Secretary
+234 	646 	1 	646 	Wanda 	Lane 	Female 	Twiyo 	Help Desk Technician
+235 	520 	8 	520 	Melissa 	Wallace 	Female 	Skyvu 	Administrative Officer
+236 	644 	8 	644 	Louis 	Brooks 	Male 	Nlounge 	VP Quality Control
+237 	725 	8 	725 	Carol 	Russell 	Female 	BlogXS 	Pharmacist
+238 	934 	4 	934 	Joseph 	Burton 	Male 	Leexo 	Compensation Analyst
+239 	151 	10 	151 	Brandon 	Oliver 	Male 	Voomm 	Internal Auditor
+240 	945 	5 	945 	Anne 	Reed 	Female 	Twitterworks 	Director of Sales
+241 	343 	3 	343 	Joe 	Price 	Male 	Fanoodle 	Marketing Manager
+242 	380 	9 	380 	Martha 	Payne 	Female 	Quinu 	Assistant Media Planner
+243 	911 	4 	911 	Patrick 	Reed 	Male 	Jabberstorm 	Senior Quality Engineer
+244 	621 	9 	621 	Amy 	Long 	Female 	Skidoo 	Research Associate
+245 	413 	9 	413 	Diane 	Bailey 	Female 	Wikibox 	Technical Writer
+246 	926 	6 	926 	Anne 	Wagner 	Female 	Skyba 	Legal Assistant
+247 	134 	3 	134 	Diana 	Hall 	Female 	Quinu 	Financial Advisor
+248 	396 	6 	396 	Juan 	Romero 	Male 	Zoonder 	Analyst Programmer
+249 	535 	10 	535 	Nancy 	Cox 	Female 	Trudeo 	Research Associate
+
+250 rows × 8 columns
+
+?
+
+?
+
+?
+
+?
+
+?
+
+?
+
+?
+
+?
+
+?
+
+?
+
