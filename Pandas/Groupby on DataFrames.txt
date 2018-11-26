@@ -1,0 +1,299 @@
+
+
+
+import pandas as pd
+
+fortune = pd.read_csv("fortune1000.csv", index_col ="Rank")
+
+sectors = fortune.groupby("Sector")
+
+fortune.head(3)
+
+	Company 	Sector 	Industry 	Location 	Revenue 	Profits 	Employees
+Rank 							
+1 	Walmart 	Retailing 	General Merchandisers 	Bentonville, AR 	482130 	14694 	2300000
+2 	Exxon Mobil 	Energy 	Petroleum Refining 	Irving, TX 	246204 	16150 	75600
+3 	Apple 	Technology 	Computers, Office Equipment 	Cupertino, CA 	233715 	53394 	110000
+
+type(fortune)
+
+pandas.core.frame.DataFrame
+
+type(sectors)
+
+pandas.core.groupby.DataFrameGroupBy
+
+len(sectors)
+
+21
+
+fortune("Sector").nunique()
+
+fortune["Sector"].value_counts()
+
+Financials                      139
+Energy                          122
+Technology                      102
+Retailing                        80
+Health Care                      75
+Business Services                51
+Industrials                      46
+Materials                        43
+Food, Beverages & Tobacco        43
+Wholesalers                      40
+Transportation                   36
+Chemicals                        30
+Household Products               28
+Engineering & Construction       26
+Hotels, Resturants & Leisure     25
+Media                            25
+Motor Vehicles & Parts           24
+Aerospace & Defense              20
+Telecommunications               15
+Apparel                          15
+Food and Drug Stores             15
+Name: Sector, dtype: int64
+
+fortune["Sector"]
+
+sectors.first()
+
+sectors.last()
+
+sectors.groups
+
+fortune.loc[45]
+
+Company        United Technologies
+Sector         Aerospace & Defense
+Industry     Aerospace and Defense
+Location            Farmington, CT
+Revenue                      61047
+Profits                       7608
+Employees                   197200
+Name: 45, dtype: object
+
+?
+
+Retrive a group with .get_group() Method
+
+fortune = pd.read_csv("fortune1000.csv", index_col ="Rank")
+
+sectors = fortune.groupby("Sector")
+
+fortune.head(3)
+
+	Company 	Sector 	Industry 	Location 	Revenue 	Profits 	Employees
+Rank 							
+1 	Walmart 	Retailing 	General Merchandisers 	Bentonville, AR 	482130 	14694 	2300000
+2 	Exxon Mobil 	Energy 	Petroleum Refining 	Irving, TX 	246204 	16150 	75600
+3 	Apple 	Technology 	Computers, Office Equipment 	Cupertino, CA 	233715 	53394 	110000
+
+sectors.get_group("Energy")
+
+sectors.get_group("Technology")
+
+sectors.get_group("Apparel") 
+
+?
+
+fortune[fortune["Sector"] == "Apparel"]
+
+?
+
+fortune = pd.read_csv("fortune1000.csv", index_col ="Rank")
+
+sectors = fortune.groupby("Sector")
+
+fortune.head(3)
+
+	Company 	Sector 	Industry 	Location 	Revenue 	Profits 	Employees
+Rank 							
+1 	Walmart 	Retailing 	General Merchandisers 	Bentonville, AR 	482130 	14694 	2300000
+2 	Exxon Mobil 	Energy 	Petroleum Refining 	Irving, TX 	246204 	16150 	75600
+3 	Apple 	Technology 	Computers, Office Equipment 	Cupertino, CA 	233715 	53394 	110000
+
+sectors.get_group("Apparel")["Revenue"].sum()
+
+95968
+
+sectors.max()
+
+sectors.min()
+
+sectors.sum()
+
+sectors.mean()
+
+sectors["Revenue"].sum()
+
+sectors["Employees"].sum()
+
+sectors["Profits"].max()
+
+sectors["Profits"].min()
+
+sectors["Employees"].mean()
+
+?
+
+sectors[["Revenue","Profits"]].sum()
+
+Grouping by Multiple Columns
+
+fortune = pd.read_csv("fortune1000.csv", index_col ="Rank")
+
+sectors = fortune.groupby(["Sector","Industry"])
+
+sectors.size()
+
+fortune.head(3)
+
+	Company 	Sector 	Industry 	Location 	Revenue 	Profits 	Employees
+Rank 							
+1 	Walmart 	Retailing 	General Merchandisers 	Bentonville, AR 	482130 	14694 	2300000
+2 	Exxon Mobil 	Energy 	Petroleum Refining 	Irving, TX 	246204 	16150 	75600
+3 	Apple 	Technology 	Computers, Office Equipment 	Cupertino, CA 	233715 	53394 	110000
+
+sectors.size()
+
+sectors.sum()
+
+sectors["Revenue"].sum()
+
+sectors["Employees"].mean()
+
+The .agg() Method
+
+fortune = pd.read_csv("fortune1000.csv", index_col ="Rank")
+
+sectors = fortune.groupby("Sector")
+
+fortune.head(3)
+
+	Company 	Sector 	Industry 	Location 	Revenue 	Profits 	Employees
+Rank 							
+1 	Walmart 	Retailing 	General Merchandisers 	Bentonville, AR 	482130 	14694 	2300000
+2 	Exxon Mobil 	Energy 	Petroleum Refining 	Irving, TX 	246204 	16150 	75600
+3 	Apple 	Technology 	Computers, Office Equipment 	Cupertino, CA 	233715 	53394 	110000
+
+sectors.agg({"Revenue" : "sum", 
+
+            "Profits" : "sum",
+
+            "Employees" : "mean"})
+
+?
+
+?
+
+sectors.agg({"Revenue" : ["sum","mean"], 
+
+            "Profits" : "sum",
+
+            "Employees" : "mean"})
+
+	Revenue 	Profits 	Employees
+	sum 	mean 	sum 	mean
+Sector 				
+Aerospace & Defense 	357940 	17897.000000 	28742 	48402.850000
+Apparel 	95968 	6397.866667 	8236 	23093.133333
+Business Services 	272195 	5337.156863 	28227 	26687.254902
+Chemicals 	243897 	8129.900000 	22628 	15455.033333
+Energy 	1517809 	12441.057377 	-73447 	9745.303279
+Engineering & Construction 	153983 	5922.423077 	5304 	15642.615385
+Financials 	2217159 	15950.784173 	260209 	24172.287770
+Food and Drug Stores 	483769 	32251.266667 	16759 	93026.533333
+Food, Beverages & Tobacco 	555967 	12929.465116 	51417 	28177.488372
+Health Care 	1614707 	21529.426667 	106114 	35710.520000
+Hotels, Resturants & Leisure 	169546 	6781.840000 	20697 	99369.800000
+Household Products 	234737 	8383.464286 	14428 	23072.785714
+Industrials 	497581 	10816.978261 	20764 	33591.934783
+Materials 	259145 	6026.627907 	4428 	14840.069767
+Media 	220764 	8830.560000 	24347 	22012.560000
+Motor Vehicles & Parts 	482540 	20105.833333 	25898 	45106.666667
+Retailing 	1465076 	18313.450000 	47830 	77845.362500
+Technology 	1377600 	13505.882353 	180473 	35087.735294
+Telecommunications 	461834 	30788.933333 	48637 	55497.866667
+Transportation 	408508 	11347.444444 	44169 	42688.694444
+Wholesalers 	444800 	11120.000000 	8233 	13139.925000
+
+sectors.agg( ["size","sum","mean"]      )
+
+?
+
+Iterating through Groups
+
+fortune = pd.read_csv("fortune1000.csv", index_col ="Rank")
+
+sectors = fortune.groupby("Sector")
+
+fortune.head(3)
+
+	Company 	Sector 	Industry 	Location 	Revenue 	Profits 	Employees
+Rank 							
+1 	Walmart 	Retailing 	General Merchandisers 	Bentonville, AR 	482130 	14694 	2300000
+2 	Exxon Mobil 	Energy 	Petroleum Refining 	Irving, TX 	246204 	16150 	75600
+3 	Apple 	Technology 	Computers, Office Equipment 	Cupertino, CA 	233715 	53394 	110000
+
+df = pd.DataFrame(columns= fortune.columns)
+
+df
+
+	Company 	Sector 	Industry 	Location 	Revenue 	Profits 	Employees
+
+for sectors , data in sectors:
+
+    highest_revenue_company_in_group = data.nlargest(1, "Revenue")
+
+    df = df.append(highest_revenue_company_in_group)
+
+df
+
+cities = fortune.groupby("Location")
+
+df = pd.DataFrame(columns= fortune.columns)
+
+df
+
+	Company 	Sector 	Industry 	Location 	Revenue 	Profits 	Employees
+
+for city,data in cities:
+
+    highest_revenue_in_city = data.nlargest(1,"Revenue")
+
+    df = df.append(highest_revenue_in_city)
+
+        
+
+df
+
+	Company 	Sector 	Industry 	Location 	Revenue 	Profits 	Employees
+138 	Abbott Laboratories 	Health Care 	Medical Products and Equipment 	Abbott Park, IL 	20661 	4423 	74000
+169 	Goodyear Tire & Rubber 	Motor Vehicles & Parts 	Motor Vehicles and Parts 	Akron, OH 	16443 	307 	66000
+288 	Air Products & Chemicals 	Chemicals 	Chemicals 	Allentown, PA 	9895 	1278 	19550
+830 	Benchmark Electronics 	Technology 	Semiconductors and Other Electronic Components 	Angleton, TX 	2541 	95 	10500
+374 	Casey’s General Stores 	Retailing 	Specialty Retailers: Other 	Ankeny, IA 	7052 	181 	22408
+915 	Domino’s Pizza 	Hotels, Resturants & Leisure 	Food Services 	Ann Arbor, MI 	2217 	193 	11900
+596 	Colfax 	Industrials 	Industrial Machinery 	Annapolis Junction, MD 	3967 	168 	17087
+215 	Land O’Lakes 	Food, Beverages & Tobacco 	Food Consumer Products 	Arden Hills, MN 	13161 	308 	10000
+190 	AES 	Energy 	Utilities: Gas and Electric 	Arlington, VA 	14963 	306 	21000
+31 	IBM 	Technology 	Information Technology Services 	Armonk, NY 	82461 	13190 	411798
+28 	Home Depot 	Retailing 	Specialty Retailers: Other 	Atlanta, GA 	88519 	7009 	385000
+310 	Autoliv 	Motor Vehicles & Parts 	Motor Vehicles and Parts 	Auburn Hills, MI 	9170 	457 	59350
+304 	Hormel Foods 	Food, Beverages & Tobacco 	Food Consumer Products 	Austin, MN 	9264 	686 	20700
+181 	Whole Foods Market 	Food and Drug Stores 	Food and Drug Stores 	Austin, TX 	15389 	536 	76300
+668 	PolyOne 	Chemicals 	Chemicals 	Avon Lake, OH 	3378 	145 	6900
+573 	T. Rowe Price 	Financials 	Securities 	Baltimore, MD 	4201 	1223 	5999
+420 	Baxalta 	Health Care 	Pharmaceuticals 	Bannockburn, IL 	6149 	956 	17000
+624 	Albemarle 	Chemicals 	Chemicals 	Baton Rouge, LA 	3651 	335 	6963
+207 	Kellogg 	Food, Beverages & Tobacco 	Food Consumer Products 	Battle Creek, MI 	13525 	614 	33577
+91 	Nike 	Apparel 	Apparel 	Beaverton, OR 	30601 	3273 	62600
+
+
+416 rows × 7 columns
+
+?
+
+?
+

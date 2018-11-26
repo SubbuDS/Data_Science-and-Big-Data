@@ -1,0 +1,932 @@
+
+
+import pandas as pd
+
+bigmac = pd.read_csv("bigmac.csv", parse_dates = ["Date"])
+
+bigmac.head(3)
+
+	Date 	Country 	Price in US Dollars
+0 	2016-01-01 	Argentina 	2.39
+1 	2016-01-01 	Australia 	3.74
+2 	2016-01-01 	Brazil 	3.35
+
+bigmac.dtypes
+
+Date                   datetime64[ns]
+Country                        object
+Price in US Dollars           float64
+dtype: object
+
+bigmac.info()
+
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 652 entries, 0 to 651
+Data columns (total 3 columns):
+Date                   652 non-null datetime64[ns]
+Country                652 non-null object
+Price in US Dollars    652 non-null float64
+dtypes: datetime64[ns](1), float64(1), object(1)
+memory usage: 12.8+ KB
+
+Creating a MultiIndex with the .set_index() Method
+
+bigmac = pd.read_csv("bigmac.csv", parse_dates = ["Date"])
+
+bigmac.head(3) 
+
+	Date 	Country 	Price in US Dollars
+0 	2016-01-01 	Argentina 	2.39
+1 	2016-01-01 	Australia 	3.74
+2 	2016-01-01 	Brazil 	3.35
+
+bigmac.set_index(keys = ["Date","Country"], inplace = True)  #  Here Date and Country both are index's 
+
+?
+
+#bigmac.set_index(keys = ["Country","Date"])
+
+bigmac.head(3)
+
+bigmac.sort_index(inplace  = True)
+
+bigmac.head(3)
+
+		Price in US Dollars
+Date 	Country 	
+2010-01-01 	Argentina 	1.84
+Australia 	3.98
+Brazil 	4.76
+
+bigmac.index.names
+
+FrozenList(['Date', 'Country'])
+
+type(bigmac.index)
+
+pandas.core.indexes.multi.MultiIndex
+
+bigmac.index[0]
+
+(Timestamp('2010-01-01 00:00:00'), 'Argentina')
+
+?
+
+The  .get_level_values() Method
+
+bigmac = pd.read_csv("bigmac.csv", parse_dates = ["Date"], index_col = ["Date","Country"])
+
+bigmac.sort_index(inplace = True)
+
+bigmac.head(3) 
+
+		Price in US Dollars
+Date 	Country 	
+2010-01-01 	Argentina 	1.84
+Australia 	3.98
+Brazil 	4.76
+
+bigmac.index.get_level_values(0)  # level of index
+
+bigmac.index.get_level_values("Date")  # both statements are same
+
+DatetimeIndex(['2010-01-01', '2010-01-01', '2010-01-01', '2010-01-01',
+               '2010-01-01', '2010-01-01', '2010-01-01', '2010-01-01',
+               '2010-01-01', '2010-01-01',
+               ...
+               '2016-01-01', '2016-01-01', '2016-01-01', '2016-01-01',
+               '2016-01-01', '2016-01-01', '2016-01-01', '2016-01-01',
+               '2016-01-01', '2016-01-01'],
+              dtype='datetime64[ns]', name='Date', length=652, freq=None)
+
+#bigmac.index.get_level_values(1)
+
+bigmac.index.get_level_values("Country")   # these both are same
+
+Index(['Argentina', 'Australia', 'Brazil', 'Britain', 'Canada', 'Chile',
+       'China', 'Colombia', 'Costa Rica', 'Czech Republic',
+       ...
+       'Switzerland', 'Taiwan', 'Thailand', 'Turkey', 'UAE', 'Ukraine',
+       'United States', 'Uruguay', 'Venezuela', 'Vietnam'],
+      dtype='object', name='Country', length=652)
+
+?
+
+The .set_names() Method on MultiIndex
+
+bigmac = pd.read_csv("bigmac.csv", parse_dates = ["Date"], index_col = ["Date","Country"])
+
+bigmac.sort_index(inplace = True)
+
+bigmac.head(3) 
+
+		Price in US Dollars
+Date 	Country 	
+2010-01-01 	Argentina 	1.84
+Australia 	3.98
+Brazil 	4.76
+
+bigmac.index.set_names(["Date","Locations"], inplace =True)
+
+bigmac.head(3)
+
+		Price in US Dollars
+Date 	Locations 	
+2010-01-01 	Argentina 	1.84
+Australia 	3.98
+Brazil 	4.76
+
+The .sort_index() Method
+
+bigmac = pd.read_csv("bigmac.csv", parse_dates = ["Date"], index_col = ["Date","Country"])
+
+bigmac.sort_index(inplace = True)
+
+bigmac.head(3) 
+
+		Price in US Dollars
+Date 	Country 	
+2010-01-01 	Argentina 	1.84
+Australia 	3.98
+Brazil 	4.76
+
+bigmac.sort_index(ascending = [True, False], inplace = True)  #  passing boolean values to the ascending parameter to index for sorting 
+
+ Extracting rows from MultiIndex DataFrame
+
+bigmac = pd.read_csv("bigmac.csv", parse_dates = ["Date"], index_col = ["Date","Country"])
+
+bigmac.sort_index(inplace = True)
+
+bigmac.head(3) 
+
+		Price in US Dollars
+Date 	Country 	
+2010-01-01 	Argentina 	1.84
+Australia 	3.98
+Brazil 	4.76
+
+bigmac.loc[("2010-01-01","Sweden"),"Price in US Dollars"]
+
+Date        Country
+2010-01-01  Sweden     5.51
+Name: Price in US Dollars, dtype: float64
+
+bigmac.loc[("2010-07-01","Peru"), "Price in US Dollars"]
+
+Date        Country
+2010-07-01  Peru       3.54
+Name: Price in US Dollars, dtype: float64
+
+bigmac.ix[("2010-01-01","Sweden"), 0]
+
+5.51
+
+?
+
+The .transpose() Method and MultiIndex on Column Level
+
+bigmac = pd.read_csv("bigmac.csv", parse_dates = ["Date"], index_col = ["Date","Country"])
+
+bigmac.sort_index(inplace = True)
+
+bigmac.head(3) 
+
+		Price in US Dollars
+Date 	Country 	
+2010-01-01 	Argentina 	1.84
+Australia 	3.98
+Brazil 	4.76
+
+bigmac = bigmac.transpose()
+
+bigmac.head(1)
+
+Date 	2010-01-01 	... 	2016-01-01
+Country 	Argentina 	Australia 	Brazil 	Britain 	Canada 	Chile 	China 	Colombia 	Costa Rica 	Czech Republic 	... 	Switzerland 	Taiwan 	Thailand 	Turkey 	UAE 	Ukraine 	United States 	Uruguay 	Venezuela 	Vietnam
+Price in US Dollars 	1.84 	3.98 	4.76 	3.67 	3.97 	3.18 	1.83 	3.91 	3.52 	3.71 	... 	6.44 	2.08 	3.09 	3.41 	3.54 	1.54 	4.93 	3.74 	0.66 	2.67
+
+1 rows × 652 columns
+
+bigmac.ix["Price in US Dollars", ("2016-01-01", "Denmark")]
+
+4.32
+
+?
+
+The .swaplevel() Method
+
+bigmac = pd.read_csv("bigmac.csv", parse_dates = ["Date"], index_col = ["Date","Country"])
+
+bigmac.sort_index(inplace = True)
+
+bigmac.head(3) 
+
+		Price in US Dollars
+Date 	Country 	
+2010-01-01 	Argentina 	1.84
+Australia 	3.98
+Brazil 	4.76
+
+bigmac = bigmac.swaplevel()
+
+bigmac.head(3)
+
+		Price in US Dollars
+Country 	Date 	
+Argentina 	2010-01-01 	1.84
+Australia 	2010-01-01 	3.98
+Brazil 	2010-01-01 	4.76
+
+?
+
+The .stack() Method
+
+world =  pd.read_csv("worldstats.csv", index_col = ["country","year"])
+
+world.head(3)
+
+?
+
+		Population 	GDP
+country 	year 		
+Arab World 	2015 	392022276.0 	2.530102e+12
+2014 	384222592.0 	2.873600e+12
+2013 	376504253.0 	2.846994e+12
+
+world.stack().to_frame()
+
+			0
+country 	year 		
+Arab World 	2015 	Population 	3.920223e+08
+GDP 	2.530102e+12
+2014 	Population 	3.842226e+08
+GDP 	2.873600e+12
+2013 	Population 	3.765043e+08
+GDP 	2.846994e+12
+2012 	Population 	3.688026e+08
+GDP 	2.773270e+12
+2011 	Population 	3.610318e+08
+GDP 	2.497945e+12
+2010 	Population 	3.531122e+08
+GDP 	2.103825e+12
+2009 	Population 	3.450542e+08
+GDP 	1.798878e+12
+2008 	Population 	3.368865e+08
+GDP 	2.081343e+12
+2007 	Population 	3.287666e+08
+GDP 	1.641666e+12
+2006 	Population 	3.209067e+08
+GDP 	1.404190e+12
+2005 	Population 	3.134309e+08
+GDP 	1.184735e+12
+2004 	Population 	3.063874e+08
+GDP 	9.639180e+11
+2003 	Population 	2.997320e+08
+GDP 	8.218702e+11
+2002 	Population 	2.934026e+08
+GDP 	7.279939e+11
+2001 	Population 	2.872918e+08
+GDP 	7.221506e+11
+... 	... 	... 	...
+Zimbabwe 	1974 	Population 	5.967861e+06
+GDP 	3.982161e+09
+1973 	Population 	5.768382e+06
+GDP 	3.309354e+09
+1972 	Population 	5.573312e+06
+GDP 	2.677729e+09
+1971 	Population 	5.385342e+06
+GDP 	2.178716e+09
+1970 	Population 	5.206311e+06
+GDP 	1.884206e+09
+1969 	Population 	5.036321e+06
+GDP 	1.747999e+09
+1968 	Population 	4.874113e+06
+GDP 	1.479600e+09
+1967 	Population 	4.718612e+06
+GDP 	1.397002e+09
+1966 	Population 	4.568320e+06
+GDP 	1.281750e+09
+1965 	Population 	4.422132e+06
+GDP 	1.311436e+09
+1964 	Population 	4.279561e+06
+GDP 	1.217138e+09
+1963 	Population 	4.140804e+06
+GDP 	1.159512e+09
+1962 	Population 	4.006262e+06
+GDP 	1.117602e+09
+1961 	Population 	3.876638e+06
+GDP 	1.096647e+09
+1960 	Population 	3.752390e+06
+GDP 	1.052990e+09
+
+22422 rows × 1 columns
+
+The .unstack() Method 
+
+world =  pd.read_csv("worldstats.csv", index_col = ["country","year"])
+
+world.head(3)
+
+		Population 	GDP
+country 	year 		
+Arab World 	2015 	392022276.0 	2.530102e+12
+2014 	384222592.0 	2.873600e+12
+2013 	376504253.0 	2.846994e+12
+
+s = world.stack()
+
+?
+
+s.head(3)
+
+?
+
+country     year            
+Arab World  2015  Population    3.920223e+08
+                  GDP           2.530102e+12
+            2014  Population    3.842226e+08
+dtype: float64
+
+s.unstack().unstack().unstack()
+
+            year  country               
+Population  1960  Afghanistan               8.994793e+06
+                  Albania                            NaN
+                  Algeria                   1.112489e+07
+                  Andorra                            NaN
+                  Angola                             NaN
+                  Antigua and Barbuda                NaN
+                  Arab World                         NaN
+                  Argentina                          NaN
+                  Armenia                            NaN
+                  Aruba                              NaN
+                  Australia                 1.027648e+07
+                  Austria                   7.047539e+06
+                  Azerbaijan                         NaN
+                  Bahamas, The              1.095260e+05
+                  Bahrain                            NaN
+                  Bangladesh                4.820070e+07
+                  Barbados                           NaN
+                  Belarus                            NaN
+                  Belgium                   9.153489e+06
+                  Belize                    9.206800e+04
+                  Benin                     2.431620e+06
+                  Bermuda                   4.440000e+04
+                  Bhutan                             NaN
+                  Bolivia                   3.693451e+06
+                  Bosnia and Herzegovina             NaN
+                  Botswana                  5.240290e+05
+                  Brazil                    7.249358e+07
+                  Brunei Darussalam                  NaN
+                  Bulgaria                           NaN
+                  Burkina Faso              4.829291e+06
+                                                ...     
+GDP         2015  Switzerland               6.647375e+11
+                  Syrian Arab Republic               NaN
+                  Tajikistan                7.853450e+09
+                  Tanzania                  4.489539e+10
+                  Thailand                  3.952816e+11
+                  Timor-Leste               1.412378e+09
+                  Togo                      4.002724e+09
+                  Tonga                              NaN
+                  Trinidad and Tobago       2.780575e+10
+                  Tunisia                   4.301509e+10
+                  Turkey                    7.182211e+11
+                  Turkmenistan              3.733423e+10
+                  Tuvalu                             NaN
+                  Uganda                    2.636924e+10
+                  Ukraine                   9.061502e+10
+                  United Arab Emirates      3.702927e+11
+                  United Kingdom            2.848755e+12
+                  United States             1.794700e+13
+                  Upper middle income       1.973288e+13
+                  Uruguay                   5.344270e+10
+                  Uzbekistan                6.673280e+10
+                  Vanuatu                            NaN
+                  Venezuela, RB                      NaN
+                  Vietnam                   1.935994e+11
+                  Virgin Islands (U.S.)              NaN
+                  West Bank and Gaza        1.267740e+10
+                  World                     7.343364e+13
+                  Yemen, Rep.                        NaN
+                  Zambia                    2.120156e+10
+                  Zimbabwe                  1.389294e+10
+Length: 28224, dtype: float64
+
+world =  pd.read_csv("worldstats.csv", index_col = ["country","year"])
+
+world.head(3)
+
+		Population 	GDP
+country 	year 		
+Arab World 	2015 	392022276.0 	2.530102e+12
+2014 	384222592.0 	2.873600e+12
+2013 	376504253.0 	2.846994e+12
+
+s = world.stack()
+
+s.head(3)
+
+country     year            
+Arab World  2015  Population    3.920223e+08
+                  GDP           2.530102e+12
+            2014  Population    3.842226e+08
+dtype: float64
+
+s.unstack(0)
+
+s.unstack(1)
+
+	year 	1960 	1961 	1962 	1963 	1964 	1965 	1966 	1967 	1968 	1969 	... 	2006 	2007 	2008 	2009 	2010 	2011 	2012 	2013 	2014 	2015
+country 																						
+Afghanistan 	Population 	8.994793e+06 	9.164945e+06 	9.343772e+06 	9.531555e+06 	9.728645e+06 	9.935358e+06 	1.014884e+07 	1.036860e+07 	1.059979e+07 	1.084951e+07 	... 	2.518362e+07 	2.587754e+07 	2.652874e+07 	2.720729e+07 	2.796221e+07 	2.880917e+07 	2.972680e+07 	3.068250e+07 	3.162751e+07 	3.252656e+07
+GDP 	5.377778e+08 	5.488889e+08 	5.466667e+08 	7.511112e+08 	8.000000e+08 	1.006667e+09 	1.400000e+09 	1.673333e+09 	1.373333e+09 	1.408889e+09 	... 	7.057598e+09 	9.843842e+09 	1.019053e+10 	1.248694e+10 	1.593680e+10 	1.793024e+10 	2.053654e+10 	2.004633e+10 	2.005019e+10 	1.919944e+10
+Albania 	Population 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	2.992547e+06 	2.970017e+06 	2.947314e+06 	2.927519e+06 	2.913021e+06 	2.904780e+06 	2.900247e+06 	2.896652e+06 	2.893654e+06 	2.889167e+06
+GDP 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	8.992642e+09 	1.070101e+10 	1.288135e+10 	1.204421e+10 	1.192695e+10 	1.289087e+10 	1.231978e+10 	1.278103e+10 	1.327796e+10 	1.145560e+10
+Algeria 	Population 	1.112489e+07 	1.140486e+07 	1.169015e+07 	1.198513e+07 	1.229597e+07 	1.262695e+07 	1.298027e+07 	1.335420e+07 	1.374438e+07 	1.414444e+07 	... 	3.374933e+07 	3.426197e+07 	3.481106e+07 	3.540179e+07 	3.603616e+07 	3.671713e+07 	3.743943e+07 	3.818614e+07 	3.893433e+07 	3.966652e+07
+GDP 	2.723638e+09 	2.434767e+09 	2.001461e+09 	2.703004e+09 	2.909340e+09 	3.136284e+09 	3.039859e+09 	3.370870e+09 	3.852147e+09 	4.257253e+09 	... 	1.170273e+11 	1.349771e+11 	1.710007e+11 	1.372110e+11 	1.612073e+11 	2.000131e+11 	2.090474e+11 	2.097035e+11 	2.135185e+11 	1.668386e+11
+Andorra 	Population 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	8.337300e+04 	8.487800e+04 	8.561600e+04 	8.547400e+04 	8.441900e+04 	8.232600e+04 	7.931600e+04 	7.590200e+04 	NaN 	NaN
+GDP 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	3.536452e+09 	4.010785e+09 	4.001349e+09 	3.649863e+09 	3.346317e+09 	3.427236e+09 	3.146178e+09 	3.249101e+09 	NaN 	NaN
+Angola 	Population 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	1.854147e+07 	1.918391e+07 	1.984225e+07 	2.052010e+07 	2.121995e+07 	2.194230e+07 	2.268563e+07 	2.344820e+07 	2.422752e+07 	2.502197e+07
+GDP 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	4.178948e+10 	6.044892e+10 	8.417803e+10 	7.549238e+10 	8.247091e+10 	1.041159e+11 	1.153984e+11 	1.249121e+11 	1.267751e+11 	1.026431e+11
+Antigua and Barbuda 	Population 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	8.346700e+04 	8.439700e+04 	8.535000e+04 	8.630000e+04 	8.723300e+04 	8.815200e+04 	8.906900e+04 	8.998500e+04 	9.090000e+04 	9.181800e+04
+GDP 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	1.135144e+09 	1.289254e+09 	1.347350e+09 	1.206410e+09 	1.135539e+09 	1.129918e+09 	1.204713e+09 	1.200588e+09 	1.220976e+09 	1.297285e+09
+Arab World 	Population 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	1.155571e+08 	1.188239e+08 	... 	3.209067e+08 	3.287666e+08 	3.368865e+08 	3.450542e+08 	3.531122e+08 	3.610318e+08 	3.688026e+08 	3.765043e+08 	3.842226e+08 	3.920223e+08
+GDP 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	2.552596e+10 	2.817577e+10 	... 	1.404190e+12 	1.641666e+12 	2.081343e+12 	1.798878e+12 	2.103825e+12 	2.497945e+12 	2.773270e+12 	2.846994e+12 	2.873600e+12 	2.530102e+12
+Argentina 	Population 	NaN 	NaN 	2.128768e+07 	2.162184e+07 	2.195393e+07 	2.228339e+07 	2.260875e+07 	2.293220e+07 	2.326127e+07 	2.360599e+07 	... 	3.955875e+07 	3.996990e+07 	4.038186e+07 	4.079864e+07 	4.122288e+07 	4.165562e+07 	4.209522e+07 	4.253830e+07 	4.298003e+07 	NaN
+GDP 	NaN 	NaN 	2.445060e+10 	1.827212e+10 	2.560525e+10 	2.834471e+10 	2.863047e+10 	2.425667e+10 	2.643686e+10 	3.125628e+10 	... 	2.626665e+11 	3.293175e+11 	4.037820e+11 	3.766279e+11 	4.616402e+11 	5.578902e+11 	6.043785e+11 	6.239320e+11 	5.480549e+11 	NaN
+Armenia 	Population 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	3.002161e+06 	2.988117e+06 	2.975029e+06 	2.966108e+06 	2.963496e+06 	2.967984e+06 	2.978339e+06 	2.992192e+06 	3.006154e+06 	3.017712e+06
+GDP 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	6.384452e+09 	9.206302e+09 	1.166204e+10 	8.647937e+09 	9.260285e+09 	1.014211e+10 	1.061932e+10 	1.112147e+10 	1.164444e+10 	1.056140e+10
+Aruba 	Population 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	1.008300e+05 	1.012180e+05 	1.013420e+05 	1.014160e+05 	1.015970e+05 	1.019360e+05 	NaN 	NaN 	NaN 	NaN
+GDP 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	2.421475e+09 	2.623726e+09 	2.791961e+09 	2.498933e+09 	2.467704e+09 	2.584464e+09 	NaN 	NaN 	NaN 	NaN
+Australia 	Population 	1.027648e+07 	1.048300e+07 	1.074200e+07 	1.095000e+07 	1.116700e+07 	1.138800e+07 	1.165100e+07 	1.179900e+07 	1.200900e+07 	1.226300e+07 	... 	2.069790e+07 	2.082760e+07 	2.124920e+07 	2.169170e+07 	2.203175e+07 	2.234002e+07 	2.272825e+07 	2.311735e+07 	2.346409e+07 	2.378117e+07
+GDP 	1.856759e+10 	1.963938e+10 	1.988353e+10 	2.149737e+10 	2.375406e+10 	2.592564e+10 	2.725053e+10 	3.037854e+10 	3.264195e+10 	3.660656e+10 	... 	7.468808e+11 	8.530533e+11 	1.054558e+12 	9.265638e+11 	1.142251e+12 	1.389919e+12 	1.537478e+12 	1.563951e+12 	1.454675e+12 	1.339539e+12
+Austria 	Population 	7.047539e+06 	7.086299e+06 	7.129864e+06 	7.175811e+06 	7.223801e+06 	7.270889e+06 	7.322066e+06 	7.376998e+06 	7.415403e+06 	7.441055e+06 	... 	8.268641e+06 	8.295487e+06 	8.321496e+06 	8.343323e+06 	8.363404e+06 	8.391643e+06 	8.429991e+06 	8.479375e+06 	8.541575e+06 	8.611088e+06
+GDP 	6.592694e+09 	7.311750e+09 	7.756110e+09 	8.374175e+09 	9.169984e+09 	9.994071e+09 	1.088768e+10 	1.157943e+10 	1.244063e+10 	1.358280e+10 	... 	3.343094e+11 	3.864590e+11 	4.276115e+11 	3.975943e+11 	3.902351e+11 	4.290107e+11 	4.073730e+11 	4.286986e+11 	4.368875e+11 	3.740559e+11
+Azerbaijan 	Population 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	8.484550e+06 	8.581300e+06 	8.763400e+06 	8.947243e+06 	9.054332e+06 	9.173082e+06 	9.295784e+06 	9.416801e+06 	9.535079e+06 	9.651349e+06
+GDP 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	2.098302e+10 	3.305034e+10 	4.885248e+10 	4.429149e+10 	5.290270e+10 	6.595163e+10 	6.873091e+10 	7.356048e+10 	7.519801e+10 	5.304714e+10
+Bahamas, The 	Population 	1.095260e+05 	1.151080e+05 	1.210830e+05 	1.273310e+05 	1.336970e+05 	1.400490e+05 	1.463640e+05 	1.526070e+05 	1.586290e+05 	1.642500e+05 	... 	3.358010e+05 	3.422590e+05 	3.485870e+05 	3.547800e+05 	3.608300e+05 	3.667110e+05 	3.723880e+05 	3.778410e+05 	3.830540e+05 	3.880190e+05
+GDP 	1.698023e+08 	1.900962e+08 	2.122528e+08 	2.377428e+08 	2.666641e+08 	3.003922e+08 	3.400000e+08 	3.901961e+08 	4.449020e+08 	5.281373e+08 	... 	7.965588e+09 	8.318996e+09 	8.246650e+09 	7.820420e+09 	7.909580e+09 	7.889750e+09 	8.234470e+09 	8.431750e+09 	8.510500e+09 	8.884441e+09
+Bahrain 	Population 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	9.408080e+05 	1.026568e+06 	1.115777e+06 	1.196774e+06 	1.261319e+06 	1.306014e+06 	1.333577e+06 	1.349427e+06 	1.361930e+06 	1.377237e+06
+GDP 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	1.850505e+10 	2.173000e+10 	2.571088e+10 	2.293822e+10 	2.571327e+10 	2.904407e+10 	3.075646e+10 	3.289761e+10 	3.385106e+10 	3.222149e+10
+... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	...
+United Arab Emirates 	Population 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	5.171255e+06 	6.010100e+06 	6.900142e+06 	7.705423e+06 	8.329453e+06 	8.734722e+06 	8.952542e+06 	9.039978e+06 	9.086139e+06 	9.156963e+06
+GDP 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	2.221059e+11 	2.579161e+11 	3.154746e+11 	2.535474e+11 	2.860493e+11 	3.485261e+11 	3.734295e+11 	3.871921e+11 	3.994513e+11 	3.702927e+11
+United Kingdom 	Population 	5.240000e+07 	5.280000e+07 	5.325000e+07 	5.365000e+07 	5.400000e+07 	5.434805e+07 	5.464850e+07 	5.494360e+07 	5.521170e+07 	5.544175e+07 	... 	6.084682e+07 	6.132246e+07 	6.180700e+07 	6.227627e+07 	6.276636e+07 	6.325892e+07 	6.370030e+07 	6.412823e+07 	6.461316e+07 	6.513823e+07
+GDP 	7.232805e+10 	7.669436e+10 	8.060194e+10 	8.544377e+10 	9.338760e+10 	1.005958e+11 	1.070907e+11 	1.111854e+11 	1.047027e+11 	1.126769e+11 	... 	2.588077e+12 	2.969734e+12 	2.793377e+12 	2.314577e+12 	2.403504e+12 	2.594905e+12 	2.630473e+12 	2.712296e+12 	2.990201e+12 	2.848755e+12
+United States 	Population 	1.806710e+08 	1.836910e+08 	1.865380e+08 	1.892420e+08 	1.918890e+08 	1.943030e+08 	1.965600e+08 	1.987120e+08 	2.007060e+08 	2.026770e+08 	... 	2.983799e+08 	3.012312e+08 	3.040940e+08 	3.067715e+08 	3.093469e+08 	3.117189e+08 	3.141026e+08 	3.164274e+08 	3.189074e+08 	3.214188e+08
+GDP 	5.433000e+11 	5.633000e+11 	6.051000e+11 	6.386000e+11 	6.858000e+11 	7.437000e+11 	8.150000e+11 	8.617000e+11 	9.425000e+11 	1.019900e+12 	... 	1.385589e+13 	1.447764e+13 	1.471858e+13 	1.441874e+13 	1.496437e+13 	1.551793e+13 	1.615526e+13 	1.666316e+13 	1.734807e+13 	1.794700e+13
+Upper middle income 	Population 	1.154592e+09 	1.159145e+09 	1.176093e+09 	1.204372e+09 	1.232266e+09 	1.261069e+09 	1.292755e+09 	1.323615e+09 	1.355381e+09 	1.388827e+09 	... 	2.380136e+09 	2.397567e+09 	2.415306e+09 	2.433652e+09 	2.452055e+09 	2.470971e+09 	2.490586e+09 	2.510573e+09 	2.530632e+09 	2.550326e+09
+GDP 	1.854612e+11 	1.690732e+11 	1.777957e+11 	1.955819e+11 	2.144250e+11 	2.397244e+11 	2.666625e+11 	2.766866e+11 	2.898954e+11 	3.221882e+11 	... 	8.620784e+12 	1.073130e+13 	1.312644e+13 	1.263584e+13 	1.530029e+13 	1.829801e+13 	1.955543e+13 	2.080729e+13 	2.133305e+13 	1.973288e+13
+Uruguay 	Population 	2.538651e+06 	2.571691e+06 	2.603887e+06 	2.635128e+06 	2.665387e+06 	2.694535e+06 	2.722874e+06 	2.750093e+06 	2.774771e+06 	2.795044e+06 	... 	3.331041e+06 	3.339750e+06 	3.350832e+06 	3.362761e+06 	3.374414e+06 	3.385610e+06 	3.396753e+06 	3.407969e+06 	3.419516e+06 	3.431555e+06
+GDP 	1.242289e+09 	1.547389e+09 	1.710004e+09 	1.539682e+09 	1.975702e+09 	1.890769e+09 	1.809184e+09 	1.597721e+09 	1.593675e+09 	2.004435e+09 	... 	1.957946e+10 	2.341057e+10 	3.036621e+10 	3.166091e+10 	4.028468e+10 	4.796244e+10 	5.126540e+10 	5.753123e+10 	5.723577e+10 	5.344270e+10
+Uzbekistan 	Population 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	2.648825e+07 	2.686800e+07 	2.730280e+07 	2.776740e+07 	2.856240e+07 	2.933940e+07 	2.977450e+07 	3.024320e+07 	3.075770e+07 	3.129950e+07
+GDP 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	1.703090e+10 	2.231139e+10 	2.793403e+10 	3.281683e+10 	3.933277e+10 	4.532432e+10 	5.118344e+10 	5.679566e+10 	6.313285e+10 	6.673280e+10
+Vanuatu 	Population 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	2.146350e+05 	2.199560e+05 	2.253350e+05 	2.307820e+05 	2.362990e+05 	2.418760e+05 	2.474980e+05 	2.531650e+05 	2.588830e+05 	NaN
+GDP 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	4.393768e+08 	5.264283e+08 	6.079586e+08 	6.100666e+08 	7.008043e+08 	7.921497e+08 	7.817029e+08 	8.017876e+08 	8.149546e+08 	NaN
+Venezuela, RB 	Population 	8.146845e+06 	8.461684e+06 	8.790590e+06 	9.130346e+06 	9.476255e+06 	9.824694e+06 	1.017514e+07 	1.052805e+07 	1.088200e+07 	1.123549e+07 	... 	2.722123e+07 	2.767066e+07 	2.811672e+07 	2.855861e+07 	2.899574e+07 	2.942763e+07 	2.985424e+07 	3.027604e+07 	NaN 	NaN
+GDP 	8.607600e+09 	8.923367e+09 	9.873398e+09 	1.066338e+10 	9.113581e+09 	9.602945e+09 	1.009657e+10 	1.047278e+10 	1.147091e+10 	1.192757e+10 	... 	1.834775e+11 	2.303642e+11 	3.156002e+11 	3.294190e+11 	3.938015e+11 	3.164822e+11 	3.812862e+11 	3.713366e+11 	NaN 	NaN
+Vietnam 	Population 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	8.331120e+07 	8.421850e+07 	8.511870e+07 	8.602500e+07 	8.693250e+07 	8.786030e+07 	8.880920e+07 	8.975950e+07 	9.072890e+07 	9.170380e+07
+GDP 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	6.637166e+10 	7.741443e+10 	9.913030e+10 	1.060146e+11 	1.159317e+11 	1.355395e+11 	1.558200e+11 	1.712220e+11 	1.862047e+11 	1.935994e+11
+Virgin Islands (U.S.) 	Population 	3.200000e+04 	3.410000e+04 	3.630000e+04 	3.870000e+04 	4.130000e+04 	4.400000e+04 	4.730000e+04 	5.080000e+04 	5.460000e+04 	5.860000e+04 	... 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN
+GDP 	2.420000e+07 	2.570000e+07 	3.690000e+07 	4.140000e+07 	5.380000e+07 	6.650000e+07 	8.410000e+07 	1.154000e+08 	1.738000e+08 	2.113000e+08 	... 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN
+West Bank and Gaza 	Population 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	3.406334e+06 	3.494496e+06 	3.596688e+06 	3.702218e+06 	3.811102e+06 	3.927051e+06 	4.046901e+06 	4.169506e+06 	4.294682e+06 	4.422143e+06
+GDP 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	4.910100e+09 	5.505800e+09 	6.673500e+09 	7.268200e+09 	8.913100e+09 	1.045985e+10 	1.127940e+10 	1.247600e+10 	1.271560e+10 	1.267740e+10
+World 	Population 	3.035056e+09 	3.076121e+09 	3.129064e+09 	3.193947e+09 	3.259355e+09 	3.326054e+09 	3.395866e+09 	3.465297e+09 	3.535512e+09 	3.609910e+09 	... 	6.594722e+09 	6.675833e+09 	6.758303e+09 	6.840956e+09 	6.923684e+09 	7.006908e+09 	7.089452e+09 	7.176092e+09 	7.260780e+09 	7.346633e+09
+GDP 	1.364643e+12 	1.420440e+12 	1.524573e+12 	1.638187e+12 	1.799675e+12 	1.959900e+12 	2.125397e+12 	2.262923e+12 	2.440549e+12 	2.686747e+12 	... 	5.107451e+13 	5.758343e+13 	6.312856e+13 	5.983553e+13 	6.564782e+13 	7.284314e+13 	7.442836e+13 	7.643132e+13 	7.810634e+13 	7.343364e+13
+Yemen, Rep. 	Population 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	2.109397e+07 	2.170110e+07 	2.232270e+07 	2.295423e+07 	2.359197e+07 	2.423494e+07 	2.488279e+07 	2.553322e+07 	NaN 	NaN
+GDP 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	1.908173e+10 	2.563367e+10 	3.039720e+10 	2.845950e+10 	3.090675e+10 	3.107886e+10 	3.207477e+10 	3.595450e+10 	NaN 	NaN
+Zambia 	Population 	3.049586e+06 	3.142848e+06 	3.240664e+06 	3.342894e+06 	3.449266e+06 	3.559687e+06 	3.674088e+06 	3.792864e+06 	3.916928e+06 	4.047479e+06 	... 	1.238151e+07 	1.273868e+07 	1.311458e+07 	1.350785e+07 	1.391744e+07 	1.434353e+07 	1.478658e+07 	1.524609e+07 	1.572134e+07 	1.621177e+07
+GDP 	6.987397e+08 	6.823597e+08 	6.792797e+08 	7.043397e+08 	8.226397e+08 	1.061200e+09 	1.239000e+09 	1.340639e+09 	1.573739e+09 	1.926399e+09 	... 	1.275686e+10 	1.405696e+10 	1.791086e+10 	1.532834e+10 	2.026555e+10 	2.345952e+10 	2.550306e+10 	2.804552e+10 	2.713464e+10 	2.120156e+10
+Zimbabwe 	Population 	3.752390e+06 	3.876638e+06 	4.006262e+06 	4.140804e+06 	4.279561e+06 	4.422132e+06 	4.568320e+06 	4.718612e+06 	4.874113e+06 	5.036321e+06 	... 	1.312794e+07 	1.329780e+07 	1.349546e+07 	1.372100e+07 	1.397390e+07 	1.425559e+07 	1.456548e+07 	1.489809e+07 	1.524586e+07 	1.560275e+07
+GDP 	1.052990e+09 	1.096647e+09 	1.117602e+09 	1.159512e+09 	1.217138e+09 	1.311436e+09 	1.281750e+09 	1.397002e+09 	1.479600e+09 	1.747999e+09 	... 	5.443896e+09 	5.291950e+09 	4.415703e+09 	8.157077e+09 	9.422161e+09 	1.095623e+10 	1.239272e+10 	1.349023e+10 	1.419691e+10 	1.389294e+10
+
+504 rows × 56 columns
+
+s.unstack(-1)  # negative index
+
+s.unstack(2)
+
+?
+
+s.unstack(-2)
+
+s.unstack(1)
+
+?
+
+s.unstack(-3)
+
+s.unstack(0)
+
+	country 	Afghanistan 	Albania 	Algeria 	Andorra 	Angola 	Antigua and Barbuda 	Arab World 	Argentina 	Armenia 	Aruba 	... 	Uzbekistan 	Vanuatu 	Venezuela, RB 	Vietnam 	Virgin Islands (U.S.) 	West Bank and Gaza 	World 	Yemen, Rep. 	Zambia 	Zimbabwe
+year 																						
+1960 	Population 	8.994793e+06 	NaN 	1.112489e+07 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	NaN 	NaN 	8.146845e+06 	NaN 	32000.0 	NaN 	3.035056e+09 	NaN 	3.049586e+06 	3.752390e+06
+GDP 	5.377778e+08 	NaN 	2.723638e+09 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	NaN 	NaN 	8.607600e+09 	NaN 	24200000.0 	NaN 	1.364643e+12 	NaN 	6.987397e+08 	1.052990e+09
+1961 	Population 	9.164945e+06 	NaN 	1.140486e+07 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	NaN 	NaN 	8.461684e+06 	NaN 	34100.0 	NaN 	3.076121e+09 	NaN 	3.142848e+06 	3.876638e+06
+GDP 	5.488889e+08 	NaN 	2.434767e+09 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	NaN 	NaN 	8.923367e+09 	NaN 	25700000.0 	NaN 	1.420440e+12 	NaN 	6.823597e+08 	1.096647e+09
+1962 	Population 	9.343772e+06 	NaN 	1.169015e+07 	NaN 	NaN 	NaN 	NaN 	2.128768e+07 	NaN 	NaN 	... 	NaN 	NaN 	8.790590e+06 	NaN 	36300.0 	NaN 	3.129064e+09 	NaN 	3.240664e+06 	4.006262e+06
+GDP 	5.466667e+08 	NaN 	2.001461e+09 	NaN 	NaN 	NaN 	NaN 	2.445060e+10 	NaN 	NaN 	... 	NaN 	NaN 	9.873398e+09 	NaN 	36900000.0 	NaN 	1.524573e+12 	NaN 	6.792797e+08 	1.117602e+09
+1963 	Population 	9.531555e+06 	NaN 	1.198513e+07 	NaN 	NaN 	NaN 	NaN 	2.162184e+07 	NaN 	NaN 	... 	NaN 	NaN 	9.130346e+06 	NaN 	38700.0 	NaN 	3.193947e+09 	NaN 	3.342894e+06 	4.140804e+06
+GDP 	7.511112e+08 	NaN 	2.703004e+09 	NaN 	NaN 	NaN 	NaN 	1.827212e+10 	NaN 	NaN 	... 	NaN 	NaN 	1.066338e+10 	NaN 	41400000.0 	NaN 	1.638187e+12 	NaN 	7.043397e+08 	1.159512e+09
+1964 	Population 	9.728645e+06 	NaN 	1.229597e+07 	NaN 	NaN 	NaN 	NaN 	2.195393e+07 	NaN 	NaN 	... 	NaN 	NaN 	9.476255e+06 	NaN 	41300.0 	NaN 	3.259355e+09 	NaN 	3.449266e+06 	4.279561e+06
+GDP 	8.000000e+08 	NaN 	2.909340e+09 	NaN 	NaN 	NaN 	NaN 	2.560525e+10 	NaN 	NaN 	... 	NaN 	NaN 	9.113581e+09 	NaN 	53800000.0 	NaN 	1.799675e+12 	NaN 	8.226397e+08 	1.217138e+09
+1965 	Population 	9.935358e+06 	NaN 	1.262695e+07 	NaN 	NaN 	NaN 	NaN 	2.228339e+07 	NaN 	NaN 	... 	NaN 	NaN 	9.824694e+06 	NaN 	44000.0 	NaN 	3.326054e+09 	NaN 	3.559687e+06 	4.422132e+06
+GDP 	1.006667e+09 	NaN 	3.136284e+09 	NaN 	NaN 	NaN 	NaN 	2.834471e+10 	NaN 	NaN 	... 	NaN 	NaN 	9.602945e+09 	NaN 	66500000.0 	NaN 	1.959900e+12 	NaN 	1.061200e+09 	1.311436e+09
+1966 	Population 	1.014884e+07 	NaN 	1.298027e+07 	NaN 	NaN 	NaN 	NaN 	2.260875e+07 	NaN 	NaN 	... 	NaN 	NaN 	1.017514e+07 	NaN 	47300.0 	NaN 	3.395866e+09 	NaN 	3.674088e+06 	4.568320e+06
+GDP 	1.400000e+09 	NaN 	3.039859e+09 	NaN 	NaN 	NaN 	NaN 	2.863047e+10 	NaN 	NaN 	... 	NaN 	NaN 	1.009657e+10 	NaN 	84100000.0 	NaN 	2.125397e+12 	NaN 	1.239000e+09 	1.281750e+09
+1967 	Population 	1.036860e+07 	NaN 	1.335420e+07 	NaN 	NaN 	NaN 	NaN 	2.293220e+07 	NaN 	NaN 	... 	NaN 	NaN 	1.052805e+07 	NaN 	50800.0 	NaN 	3.465297e+09 	NaN 	3.792864e+06 	4.718612e+06
+GDP 	1.673333e+09 	NaN 	3.370870e+09 	NaN 	NaN 	NaN 	NaN 	2.425667e+10 	NaN 	NaN 	... 	NaN 	NaN 	1.047278e+10 	NaN 	115400000.0 	NaN 	2.262923e+12 	NaN 	1.340639e+09 	1.397002e+09
+1968 	Population 	1.059979e+07 	NaN 	1.374438e+07 	NaN 	NaN 	NaN 	1.155571e+08 	2.326127e+07 	NaN 	NaN 	... 	NaN 	NaN 	1.088200e+07 	NaN 	54600.0 	NaN 	3.535512e+09 	NaN 	3.916928e+06 	4.874113e+06
+GDP 	1.373333e+09 	NaN 	3.852147e+09 	NaN 	NaN 	NaN 	2.552596e+10 	2.643686e+10 	NaN 	NaN 	... 	NaN 	NaN 	1.147091e+10 	NaN 	173800000.0 	NaN 	2.440549e+12 	NaN 	1.573739e+09 	1.479600e+09
+1969 	Population 	1.084951e+07 	NaN 	1.414444e+07 	NaN 	NaN 	NaN 	1.188239e+08 	2.360599e+07 	NaN 	NaN 	... 	NaN 	NaN 	1.123549e+07 	NaN 	58600.0 	NaN 	3.609910e+09 	NaN 	4.047479e+06 	5.036321e+06
+GDP 	1.408889e+09 	NaN 	4.257253e+09 	NaN 	NaN 	NaN 	2.817577e+10 	3.125628e+10 	NaN 	NaN 	... 	NaN 	NaN 	1.192757e+10 	NaN 	211300000.0 	NaN 	2.686747e+12 	NaN 	1.926399e+09 	1.747999e+09
+1970 	Population 	1.112110e+07 	NaN 	1.455003e+07 	2.427900e+04 	NaN 	NaN 	1.221282e+08 	2.397306e+07 	NaN 	NaN 	... 	NaN 	NaN 	1.158776e+07 	NaN 	63000.0 	NaN 	3.684997e+09 	NaN 	4.185378e+06 	5.206311e+06
+GDP 	1.748887e+09 	NaN 	4.863488e+09 	7.861762e+07 	NaN 	NaN 	3.109149e+10 	3.158421e+10 	NaN 	NaN 	... 	NaN 	NaN 	1.299312e+10 	NaN 	219000000.0 	NaN 	2.950656e+12 	NaN 	1.788779e+09 	1.884206e+09
+1971 	Population 	1.141282e+07 	NaN 	1.496011e+07 	2.556000e+04 	NaN 	NaN 	1.254391e+08 	2.436644e+07 	NaN 	NaN 	... 	NaN 	NaN 	1.193780e+07 	NaN 	71000.0 	NaN 	3.762290e+09 	NaN 	4.331002e+06 	5.385342e+06
+GDP 	1.831109e+09 	NaN 	5.077222e+09 	8.940659e+07 	NaN 	NaN 	3.610721e+10 	3.329320e+10 	NaN 	NaN 	... 	NaN 	NaN 	1.447156e+10 	NaN 	257000000.0 	NaN 	3.259057e+12 	NaN 	1.653259e+09 	2.178716e+09
+1972 	Population 	1.171690e+07 	NaN 	1.537710e+07 	2.689200e+04 	NaN 	NaN 	1.288012e+08 	2.478295e+07 	NaN 	NaN 	... 	NaN 	NaN 	1.228643e+07 	NaN 	76000.0 	NaN 	3.839016e+09 	NaN 	4.484141e+06 	5.573312e+06
+GDP 	1.595555e+09 	NaN 	6.761786e+09 	1.134144e+08 	NaN 	NaN 	4.296931e+10 	3.473300e+10 	NaN 	NaN 	... 	NaN 	NaN 	1.592287e+10 	NaN 	307100000.0 	NaN 	3.757853e+12 	NaN 	1.872417e+09 	2.677729e+09
+1973 	Population 	1.202251e+07 	NaN 	1.580443e+07 	2.823100e+04 	NaN 	NaN 	1.322990e+08 	2.521339e+07 	NaN 	NaN 	... 	NaN 	NaN 	1.263697e+07 	NaN 	84000.0 	NaN 	3.914800e+09 	NaN 	4.644329e+06 	5.768382e+06
+GDP 	1.733333e+09 	NaN 	8.715106e+09 	1.508416e+08 	NaN 	NaN 	5.459015e+10 	5.254400e+10 	NaN 	NaN 	... 	NaN 	NaN 	1.944593e+10 	NaN 	351600000.0 	NaN 	4.578523e+12 	NaN 	2.434255e+09 	3.309354e+09
+1974 	Population 	1.231555e+07 	NaN 	1.624711e+07 	2.951400e+04 	NaN 	NaN 	1.360445e+08 	2.564450e+07 	NaN 	NaN 	... 	NaN 	NaN 	1.299402e+07 	NaN 	90000.0 	NaN 	3.991194e+09 	NaN 	4.810810e+06 	5.967861e+06
+GDP 	2.155555e+09 	NaN 	1.320971e+10 	1.865572e+08 	NaN 	NaN 	1.046016e+11 	7.243678e+10 	NaN 	NaN 	... 	NaN 	NaN 	2.908710e+10 	NaN 	395400000.0 	NaN 	5.279355e+12 	NaN 	2.910981e+09 	3.982161e+09
+... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	...
+2001 	Population 	2.053116e+07 	3.060173e+06 	3.159032e+07 	6.777000e+04 	1.556279e+07 	7.897200e+04 	2.872918e+08 	3.747154e+07 	3.060036e+06 	9.289400e+04 	... 	2.496445e+07 	1.892880e+05 	2.494022e+07 	7.862050e+07 	NaN 	2.997784e+06 	6.195590e+09 	1.830629e+07 	1.086124e+07 	1.260399e+07
+GDP 	2.461666e+09 	4.060759e+09 	5.474471e+10 	1.484005e+09 	8.936064e+09 	7.737652e+08 	7.221506e+11 	2.686968e+11 	2.118468e+09 	1.920263e+09 	... 	1.140135e+10 	2.579269e+08 	1.229097e+11 	3.529135e+10 	NaN 	4.003700e+09 	3.313421e+13 	9.854042e+09 	4.094481e+09 	6.777385e+09
+2002 	Population 	2.148708e+07 	3.051010e+06 	3.199039e+07 	7.104600e+04 	1.610970e+07 	8.003000e+04 	2.934026e+08 	3.788944e+07 	3.047249e+06 	9.499500e+04 	... 	2.527185e+07 	1.939570e+05 	2.539914e+07 	7.953770e+07 	NaN 	3.075373e+06 	6.274734e+09 	1.883210e+07 	1.113998e+07 	1.269143e+07
+GDP 	4.128818e+09 	4.435079e+09 	5.676029e+10 	1.717564e+09 	1.249735e+10 	8.025293e+08 	7.279939e+11 	9.772451e+10 	2.376335e+09 	1.941095e+09 	... 	9.687951e+09 	2.626038e+08 	9.288959e+10 	3.794790e+10 	NaN 	3.555800e+09 	3.441805e+13 	1.069328e+10 	4.193846e+09 	6.342116e+09
+2003 	Population 	2.250737e+07 	3.039616e+06 	3.239489e+07 	7.478300e+04 	1.669140e+07 	8.090400e+04 	2.997320e+08 	3.830948e+07 	3.036420e+06 	9.701500e+04 	... 	2.556765e+07 	1.989630e+05 	2.585755e+07 	8.046740e+07 	NaN 	3.154969e+06 	6.353976e+09 	1.937401e+07 	1.142601e+07 	1.277416e+07
+GDP 	4.583649e+09 	5.746946e+09 	6.786383e+10 	2.373836e+09 	1.418895e+10 	8.399964e+08 	8.218702e+11 	1.275863e+11 	2.807061e+09 	2.021302e+09 	... 	1.012811e+10 	3.144631e+08 	8.362219e+10 	4.271707e+10 	NaN 	3.968000e+09 	3.865630e+13 	1.177777e+10 	4.901840e+09 	5.727592e+09
+2004 	Population 	2.349985e+07 	3.026939e+06 	3.281722e+07 	7.833700e+04 	1.729550e+07 	8.171800e+04 	3.063874e+08 	3.872878e+07 	3.025982e+06 	9.874200e+04 	... 	2.586435e+07 	2.041440e+05 	2.631448e+07 	8.143640e+07 	NaN 	3.236626e+06 	6.433749e+09 	1.993162e+07 	1.172564e+07 	1.286783e+07
+GDP 	5.285462e+09 	7.314865e+09 	8.532500e+10 	2.916913e+09 	1.964085e+10 	8.983561e+08 	9.639180e+11 	1.818731e+11 	3.576615e+09 	2.228279e+09 	... 	1.203002e+10 	3.649969e+08 	1.124514e+11 	4.942411e+10 	NaN 	4.329200e+09 	4.355213e+13 	1.387350e+10 	6.221078e+09 	5.805598e+09
+2005 	Population 	2.439995e+07 	3.011487e+06 	3.326789e+07 	8.122300e+04 	1.791294e+07 	8.256500e+04 	3.134309e+08 	3.914549e+07 	3.014917e+06 	1.000310e+05 	... 	2.616700e+07 	2.093750e+05 	2.676912e+07 	8.239210e+07 	NaN 	3.320396e+06 	6.513960e+09 	2.050438e+07 	1.204359e+07 	1.298442e+07
+GDP 	6.275076e+09 	8.158549e+09 	1.031982e+11 	3.248135e+09 	2.823371e+10 	9.973741e+08 	1.184735e+12 	2.208138e+11 	4.900470e+09 	2.331006e+09 	... 	1.430751e+10 	3.949626e+08 	1.455135e+11 	5.763326e+10 	NaN 	4.831800e+09 	4.714259e+13 	1.675377e+10 	8.331870e+09 	5.755215e+09
+2006 	Population 	2.518362e+07 	2.992547e+06 	3.374933e+07 	8.337300e+04 	1.854147e+07 	8.346700e+04 	3.209067e+08 	3.955875e+07 	3.002161e+06 	1.008300e+05 	... 	2.648825e+07 	2.146350e+05 	2.722123e+07 	8.331120e+07 	NaN 	3.406334e+06 	6.594722e+09 	2.109397e+07 	1.238151e+07 	1.312794e+07
+GDP 	7.057598e+09 	8.992642e+09 	1.170273e+11 	3.536452e+09 	4.178948e+10 	1.135144e+09 	1.404190e+12 	2.626665e+11 	6.384452e+09 	2.421475e+09 	... 	1.703090e+10 	4.393768e+08 	1.834775e+11 	6.637166e+10 	NaN 	4.910100e+09 	5.107451e+13 	1.908173e+10 	1.275686e+10 	5.443896e+09
+2007 	Population 	2.587754e+07 	2.970017e+06 	3.426197e+07 	8.487800e+04 	1.918391e+07 	8.439700e+04 	3.287666e+08 	3.996990e+07 	2.988117e+06 	1.012180e+05 	... 	2.686800e+07 	2.199560e+05 	2.767066e+07 	8.421850e+07 	NaN 	3.494496e+06 	6.675833e+09 	2.170110e+07 	1.273868e+07 	1.329780e+07
+GDP 	9.843842e+09 	1.070101e+10 	1.349771e+11 	4.010785e+09 	6.044892e+10 	1.289254e+09 	1.641666e+12 	3.293175e+11 	9.206302e+09 	2.623726e+09 	... 	2.231139e+10 	5.264283e+08 	2.303642e+11 	7.741443e+10 	NaN 	5.505800e+09 	5.758343e+13 	2.563367e+10 	1.405696e+10 	5.291950e+09
+2008 	Population 	2.652874e+07 	2.947314e+06 	3.481106e+07 	8.561600e+04 	1.984225e+07 	8.535000e+04 	3.368865e+08 	4.038186e+07 	2.975029e+06 	1.013420e+05 	... 	2.730280e+07 	2.253350e+05 	2.811672e+07 	8.511870e+07 	NaN 	3.596688e+06 	6.758303e+09 	2.232270e+07 	1.311458e+07 	1.349546e+07
+GDP 	1.019053e+10 	1.288135e+10 	1.710007e+11 	4.001349e+09 	8.417803e+10 	1.347350e+09 	2.081343e+12 	4.037820e+11 	1.166204e+10 	2.791961e+09 	... 	2.793403e+10 	6.079586e+08 	3.156002e+11 	9.913030e+10 	NaN 	6.673500e+09 	6.312856e+13 	3.039720e+10 	1.791086e+10 	4.415703e+09
+2009 	Population 	2.720729e+07 	2.927519e+06 	3.540179e+07 	8.547400e+04 	2.052010e+07 	8.630000e+04 	3.450542e+08 	4.079864e+07 	2.966108e+06 	1.014160e+05 	... 	2.776740e+07 	2.307820e+05 	2.855861e+07 	8.602500e+07 	NaN 	3.702218e+06 	6.840956e+09 	2.295423e+07 	1.350785e+07 	1.372100e+07
+GDP 	1.248694e+10 	1.204421e+10 	1.372110e+11 	3.649863e+09 	7.549238e+10 	1.206410e+09 	1.798878e+12 	3.766279e+11 	8.647937e+09 	2.498933e+09 	... 	3.281683e+10 	6.100666e+08 	3.294190e+11 	1.060146e+11 	NaN 	7.268200e+09 	5.983553e+13 	2.845950e+10 	1.532834e+10 	8.157077e+09
+2010 	Population 	2.796221e+07 	2.913021e+06 	3.603616e+07 	8.441900e+04 	2.121995e+07 	8.723300e+04 	3.531122e+08 	4.122288e+07 	2.963496e+06 	1.015970e+05 	... 	2.856240e+07 	2.362990e+05 	2.899574e+07 	8.693250e+07 	NaN 	3.811102e+06 	6.923684e+09 	2.359197e+07 	1.391744e+07 	1.397390e+07
+GDP 	1.593680e+10 	1.192695e+10 	1.612073e+11 	3.346317e+09 	8.247091e+10 	1.135539e+09 	2.103825e+12 	4.616402e+11 	9.260285e+09 	2.467704e+09 	... 	3.933277e+10 	7.008043e+08 	3.938015e+11 	1.159317e+11 	NaN 	8.913100e+09 	6.564782e+13 	3.090675e+10 	2.026555e+10 	9.422161e+09
+2011 	Population 	2.880917e+07 	2.904780e+06 	3.671713e+07 	8.232600e+04 	2.194230e+07 	8.815200e+04 	3.610318e+08 	4.165562e+07 	2.967984e+06 	1.019360e+05 	... 	2.933940e+07 	2.418760e+05 	2.942763e+07 	8.786030e+07 	NaN 	3.927051e+06 	7.006908e+09 	2.423494e+07 	1.434353e+07 	1.425559e+07
+GDP 	1.793024e+10 	1.289087e+10 	2.000131e+11 	3.427236e+09 	1.041159e+11 	1.129918e+09 	2.497945e+12 	5.578902e+11 	1.014211e+10 	2.584464e+09 	... 	4.532432e+10 	7.921497e+08 	3.164822e+11 	1.355395e+11 	NaN 	1.045985e+10 	7.284314e+13 	3.107886e+10 	2.345952e+10 	1.095623e+10
+2012 	Population 	2.972680e+07 	2.900247e+06 	3.743943e+07 	7.931600e+04 	2.268563e+07 	8.906900e+04 	3.688026e+08 	4.209522e+07 	2.978339e+06 	NaN 	... 	2.977450e+07 	2.474980e+05 	2.985424e+07 	8.880920e+07 	NaN 	4.046901e+06 	7.089452e+09 	2.488279e+07 	1.478658e+07 	1.456548e+07
+GDP 	2.053654e+10 	1.231978e+10 	2.090474e+11 	3.146178e+09 	1.153984e+11 	1.204713e+09 	2.773270e+12 	6.043785e+11 	1.061932e+10 	NaN 	... 	5.118344e+10 	7.817029e+08 	3.812862e+11 	1.558200e+11 	NaN 	1.127940e+10 	7.442836e+13 	3.207477e+10 	2.550306e+10 	1.239272e+10
+2013 	Population 	3.068250e+07 	2.896652e+06 	3.818614e+07 	7.590200e+04 	2.344820e+07 	8.998500e+04 	3.765043e+08 	4.253830e+07 	2.992192e+06 	NaN 	... 	3.024320e+07 	2.531650e+05 	3.027604e+07 	8.975950e+07 	NaN 	4.169506e+06 	7.176092e+09 	2.553322e+07 	1.524609e+07 	1.489809e+07
+GDP 	2.004633e+10 	1.278103e+10 	2.097035e+11 	3.249101e+09 	1.249121e+11 	1.200588e+09 	2.846994e+12 	6.239320e+11 	1.112147e+10 	NaN 	... 	5.679566e+10 	8.017876e+08 	3.713366e+11 	1.712220e+11 	NaN 	1.247600e+10 	7.643132e+13 	3.595450e+10 	2.804552e+10 	1.349023e+10
+2014 	Population 	3.162751e+07 	2.893654e+06 	3.893433e+07 	NaN 	2.422752e+07 	9.090000e+04 	3.842226e+08 	4.298003e+07 	3.006154e+06 	NaN 	... 	3.075770e+07 	2.588830e+05 	NaN 	9.072890e+07 	NaN 	4.294682e+06 	7.260780e+09 	NaN 	1.572134e+07 	1.524586e+07
+GDP 	2.005019e+10 	1.327796e+10 	2.135185e+11 	NaN 	1.267751e+11 	1.220976e+09 	2.873600e+12 	5.480549e+11 	1.164444e+10 	NaN 	... 	6.313285e+10 	8.149546e+08 	NaN 	1.862047e+11 	NaN 	1.271560e+10 	7.810634e+13 	NaN 	2.713464e+10 	1.419691e+10
+2015 	Population 	3.252656e+07 	2.889167e+06 	3.966652e+07 	NaN 	2.502197e+07 	9.181800e+04 	3.920223e+08 	NaN 	3.017712e+06 	NaN 	... 	3.129950e+07 	NaN 	NaN 	9.170380e+07 	NaN 	4.422143e+06 	7.346633e+09 	NaN 	1.621177e+07 	1.560275e+07
+GDP 	1.919944e+10 	1.145560e+10 	1.668386e+11 	NaN 	1.026431e+11 	1.297285e+09 	2.530102e+12 	NaN 	1.056140e+10 	NaN 	... 	6.673280e+10 	NaN 	NaN 	1.935994e+11 	NaN 	1.267740e+10 	7.343364e+13 	NaN 	2.120156e+10 	1.389294e+10
+
+112 rows × 252 columns
+
+s.unstack("year")
+
+s.unstack("country")
+
+	country 	Afghanistan 	Albania 	Algeria 	Andorra 	Angola 	Antigua and Barbuda 	Arab World 	Argentina 	Armenia 	Aruba 	... 	Uzbekistan 	Vanuatu 	Venezuela, RB 	Vietnam 	Virgin Islands (U.S.) 	West Bank and Gaza 	World 	Yemen, Rep. 	Zambia 	Zimbabwe
+year 																						
+1960 	Population 	8.994793e+06 	NaN 	1.112489e+07 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	NaN 	NaN 	8.146845e+06 	NaN 	32000.0 	NaN 	3.035056e+09 	NaN 	3.049586e+06 	3.752390e+06
+GDP 	5.377778e+08 	NaN 	2.723638e+09 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	NaN 	NaN 	8.607600e+09 	NaN 	24200000.0 	NaN 	1.364643e+12 	NaN 	6.987397e+08 	1.052990e+09
+1961 	Population 	9.164945e+06 	NaN 	1.140486e+07 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	NaN 	NaN 	8.461684e+06 	NaN 	34100.0 	NaN 	3.076121e+09 	NaN 	3.142848e+06 	3.876638e+06
+GDP 	5.488889e+08 	NaN 	2.434767e+09 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	NaN 	... 	NaN 	NaN 	8.923367e+09 	NaN 	25700000.0 	NaN 	1.420440e+12 	NaN 	6.823597e+08 	1.096647e+09
+1962 	Population 	9.343772e+06 	NaN 	1.169015e+07 	NaN 	NaN 	NaN 	NaN 	2.128768e+07 	NaN 	NaN 	... 	NaN 	NaN 	8.790590e+06 	NaN 	36300.0 	NaN 	3.129064e+09 	NaN 	3.240664e+06 	4.006262e+06
+GDP 	5.466667e+08 	NaN 	2.001461e+09 	NaN 	NaN 	NaN 	NaN 	2.445060e+10 	NaN 	NaN 	... 	NaN 	NaN 	9.873398e+09 	NaN 	36900000.0 	NaN 	1.524573e+12 	NaN 	6.792797e+08 	1.117602e+09
+1963 	Population 	9.531555e+06 	NaN 	1.198513e+07 	NaN 	NaN 	NaN 	NaN 	2.162184e+07 	NaN 	NaN 	... 	NaN 	NaN 	9.130346e+06 	NaN 	38700.0 	NaN 	3.193947e+09 	NaN 	3.342894e+06 	4.140804e+06
+GDP 	7.511112e+08 	NaN 	2.703004e+09 	NaN 	NaN 	NaN 	NaN 	1.827212e+10 	NaN 	NaN 	... 	NaN 	NaN 	1.066338e+10 	NaN 	41400000.0 	NaN 	1.638187e+12 	NaN 	7.043397e+08 	1.159512e+09
+1964 	Population 	9.728645e+06 	NaN 	1.229597e+07 	NaN 	NaN 	NaN 	NaN 	2.195393e+07 	NaN 	NaN 	... 	NaN 	NaN 	9.476255e+06 	NaN 	41300.0 	NaN 	3.259355e+09 	NaN 	3.449266e+06 	4.279561e+06
+GDP 	8.000000e+08 	NaN 	2.909340e+09 	NaN 	NaN 	NaN 	NaN 	2.560525e+10 	NaN 	NaN 	... 	NaN 	NaN 	9.113581e+09 	NaN 	53800000.0 	NaN 	1.799675e+12 	NaN 	8.226397e+08 	1.217138e+09
+1965 	Population 	9.935358e+06 	NaN 	1.262695e+07 	NaN 	NaN 	NaN 	NaN 	2.228339e+07 	NaN 	NaN 	... 	NaN 	NaN 	9.824694e+06 	NaN 	44000.0 	NaN 	3.326054e+09 	NaN 	3.559687e+06 	4.422132e+06
+GDP 	1.006667e+09 	NaN 	3.136284e+09 	NaN 	NaN 	NaN 	NaN 	2.834471e+10 	NaN 	NaN 	... 	NaN 	NaN 	9.602945e+09 	NaN 	66500000.0 	NaN 	1.959900e+12 	NaN 	1.061200e+09 	1.311436e+09
+1966 	Population 	1.014884e+07 	NaN 	1.298027e+07 	NaN 	NaN 	NaN 	NaN 	2.260875e+07 	NaN 	NaN 	... 	NaN 	NaN 	1.017514e+07 	NaN 	47300.0 	NaN 	3.395866e+09 	NaN 	3.674088e+06 	4.568320e+06
+GDP 	1.400000e+09 	NaN 	3.039859e+09 	NaN 	NaN 	NaN 	NaN 	2.863047e+10 	NaN 	NaN 	... 	NaN 	NaN 	1.009657e+10 	NaN 	84100000.0 	NaN 	2.125397e+12 	NaN 	1.239000e+09 	1.281750e+09
+1967 	Population 	1.036860e+07 	NaN 	1.335420e+07 	NaN 	NaN 	NaN 	NaN 	2.293220e+07 	NaN 	NaN 	... 	NaN 	NaN 	1.052805e+07 	NaN 	50800.0 	NaN 	3.465297e+09 	NaN 	3.792864e+06 	4.718612e+06
+GDP 	1.673333e+09 	NaN 	3.370870e+09 	NaN 	NaN 	NaN 	NaN 	2.425667e+10 	NaN 	NaN 	... 	NaN 	NaN 	1.047278e+10 	NaN 	115400000.0 	NaN 	2.262923e+12 	NaN 	1.340639e+09 	1.397002e+09
+1968 	Population 	1.059979e+07 	NaN 	1.374438e+07 	NaN 	NaN 	NaN 	1.155571e+08 	2.326127e+07 	NaN 	NaN 	... 	NaN 	NaN 	1.088200e+07 	NaN 	54600.0 	NaN 	3.535512e+09 	NaN 	3.916928e+06 	4.874113e+06
+GDP 	1.373333e+09 	NaN 	3.852147e+09 	NaN 	NaN 	NaN 	2.552596e+10 	2.643686e+10 	NaN 	NaN 	... 	NaN 	NaN 	1.147091e+10 	NaN 	173800000.0 	NaN 	2.440549e+12 	NaN 	1.573739e+09 	1.479600e+09
+1969 	Population 	1.084951e+07 	NaN 	1.414444e+07 	NaN 	NaN 	NaN 	1.188239e+08 	2.360599e+07 	NaN 	NaN 	... 	NaN 	NaN 	1.123549e+07 	NaN 	58600.0 	NaN 	3.609910e+09 	NaN 	4.047479e+06 	5.036321e+06
+GDP 	1.408889e+09 	NaN 	4.257253e+09 	NaN 	NaN 	NaN 	2.817577e+10 	3.125628e+10 	NaN 	NaN 	... 	NaN 	NaN 	1.192757e+10 	NaN 	211300000.0 	NaN 	2.686747e+12 	NaN 	1.926399e+09 	1.747999e+09
+1970 	Population 	1.112110e+07 	NaN 	1.455003e+07 	2.427900e+04 	NaN 	NaN 	1.221282e+08 	2.397306e+07 	NaN 	NaN 	... 	NaN 	NaN 	1.158776e+07 	NaN 	63000.0 	NaN 	3.684997e+09 	NaN 	4.185378e+06 	5.206311e+06
+GDP 	1.748887e+09 	NaN 	4.863488e+09 	7.861762e+07 	NaN 	NaN 	3.109149e+10 	3.158421e+10 	NaN 	NaN 	... 	NaN 	NaN 	1.299312e+10 	NaN 	219000000.0 	NaN 	2.950656e+12 	NaN 	1.788779e+09 	1.884206e+09
+1971 	Population 	1.141282e+07 	NaN 	1.496011e+07 	2.556000e+04 	NaN 	NaN 	1.254391e+08 	2.436644e+07 	NaN 	NaN 	... 	NaN 	NaN 	1.193780e+07 	NaN 	71000.0 	NaN 	3.762290e+09 	NaN 	4.331002e+06 	5.385342e+06
+GDP 	1.831109e+09 	NaN 	5.077222e+09 	8.940659e+07 	NaN 	NaN 	3.610721e+10 	3.329320e+10 	NaN 	NaN 	... 	NaN 	NaN 	1.447156e+10 	NaN 	257000000.0 	NaN 	3.259057e+12 	NaN 	1.653259e+09 	2.178716e+09
+1972 	Population 	1.171690e+07 	NaN 	1.537710e+07 	2.689200e+04 	NaN 	NaN 	1.288012e+08 	2.478295e+07 	NaN 	NaN 	... 	NaN 	NaN 	1.228643e+07 	NaN 	76000.0 	NaN 	3.839016e+09 	NaN 	4.484141e+06 	5.573312e+06
+GDP 	1.595555e+09 	NaN 	6.761786e+09 	1.134144e+08 	NaN 	NaN 	4.296931e+10 	3.473300e+10 	NaN 	NaN 	... 	NaN 	NaN 	1.592287e+10 	NaN 	307100000.0 	NaN 	3.757853e+12 	NaN 	1.872417e+09 	2.677729e+09
+1973 	Population 	1.202251e+07 	NaN 	1.580443e+07 	2.823100e+04 	NaN 	NaN 	1.322990e+08 	2.521339e+07 	NaN 	NaN 	... 	NaN 	NaN 	1.263697e+07 	NaN 	84000.0 	NaN 	3.914800e+09 	NaN 	4.644329e+06 	5.768382e+06
+GDP 	1.733333e+09 	NaN 	8.715106e+09 	1.508416e+08 	NaN 	NaN 	5.459015e+10 	5.254400e+10 	NaN 	NaN 	... 	NaN 	NaN 	1.944593e+10 	NaN 	351600000.0 	NaN 	4.578523e+12 	NaN 	2.434255e+09 	3.309354e+09
+1974 	Population 	1.231555e+07 	NaN 	1.624711e+07 	2.951400e+04 	NaN 	NaN 	1.360445e+08 	2.564450e+07 	NaN 	NaN 	... 	NaN 	NaN 	1.299402e+07 	NaN 	90000.0 	NaN 	3.991194e+09 	NaN 	4.810810e+06 	5.967861e+06
+GDP 	2.155555e+09 	NaN 	1.320971e+10 	1.865572e+08 	NaN 	NaN 	1.046016e+11 	7.243678e+10 	NaN 	NaN 	... 	NaN 	NaN 	2.908710e+10 	NaN 	395400000.0 	NaN 	5.279355e+12 	NaN 	2.910981e+09 	3.982161e+09
+... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	... 	...
+2001 	Population 	2.053116e+07 	3.060173e+06 	3.159032e+07 	6.777000e+04 	1.556279e+07 	7.897200e+04 	2.872918e+08 	3.747154e+07 	3.060036e+06 	9.289400e+04 	... 	2.496445e+07 	1.892880e+05 	2.494022e+07 	7.862050e+07 	NaN 	2.997784e+06 	6.195590e+09 	1.830629e+07 	1.086124e+07 	1.260399e+07
+GDP 	2.461666e+09 	4.060759e+09 	5.474471e+10 	1.484005e+09 	8.936064e+09 	7.737652e+08 	7.221506e+11 	2.686968e+11 	2.118468e+09 	1.920263e+09 	... 	1.140135e+10 	2.579269e+08 	1.229097e+11 	3.529135e+10 	NaN 	4.003700e+09 	3.313421e+13 	9.854042e+09 	4.094481e+09 	6.777385e+09
+2002 	Population 	2.148708e+07 	3.051010e+06 	3.199039e+07 	7.104600e+04 	1.610970e+07 	8.003000e+04 	2.934026e+08 	3.788944e+07 	3.047249e+06 	9.499500e+04 	... 	2.527185e+07 	1.939570e+05 	2.539914e+07 	7.953770e+07 	NaN 	3.075373e+06 	6.274734e+09 	1.883210e+07 	1.113998e+07 	1.269143e+07
+GDP 	4.128818e+09 	4.435079e+09 	5.676029e+10 	1.717564e+09 	1.249735e+10 	8.025293e+08 	7.279939e+11 	9.772451e+10 	2.376335e+09 	1.941095e+09 	... 	9.687951e+09 	2.626038e+08 	9.288959e+10 	3.794790e+10 	NaN 	3.555800e+09 	3.441805e+13 	1.069328e+10 	4.193846e+09 	6.342116e+09
+2003 	Population 	2.250737e+07 	3.039616e+06 	3.239489e+07 	7.478300e+04 	1.669140e+07 	8.090400e+04 	2.997320e+08 	3.830948e+07 	3.036420e+06 	9.701500e+04 	... 	2.556765e+07 	1.989630e+05 	2.585755e+07 	8.046740e+07 	NaN 	3.154969e+06 	6.353976e+09 	1.937401e+07 	1.142601e+07 	1.277416e+07
+GDP 	4.583649e+09 	5.746946e+09 	6.786383e+10 	2.373836e+09 	1.418895e+10 	8.399964e+08 	8.218702e+11 	1.275863e+11 	2.807061e+09 	2.021302e+09 	... 	1.012811e+10 	3.144631e+08 	8.362219e+10 	4.271707e+10 	NaN 	3.968000e+09 	3.865630e+13 	1.177777e+10 	4.901840e+09 	5.727592e+09
+2004 	Population 	2.349985e+07 	3.026939e+06 	3.281722e+07 	7.833700e+04 	1.729550e+07 	8.171800e+04 	3.063874e+08 	3.872878e+07 	3.025982e+06 	9.874200e+04 	... 	2.586435e+07 	2.041440e+05 	2.631448e+07 	8.143640e+07 	NaN 	3.236626e+06 	6.433749e+09 	1.993162e+07 	1.172564e+07 	1.286783e+07
+GDP 	5.285462e+09 	7.314865e+09 	8.532500e+10 	2.916913e+09 	1.964085e+10 	8.983561e+08 	9.639180e+11 	1.818731e+11 	3.576615e+09 	2.228279e+09 	... 	1.203002e+10 	3.649969e+08 	1.124514e+11 	4.942411e+10 	NaN 	4.329200e+09 	4.355213e+13 	1.387350e+10 	6.221078e+09 	5.805598e+09
+2005 	Population 	2.439995e+07 	3.011487e+06 	3.326789e+07 	8.122300e+04 	1.791294e+07 	8.256500e+04 	3.134309e+08 	3.914549e+07 	3.014917e+06 	1.000310e+05 	... 	2.616700e+07 	2.093750e+05 	2.676912e+07 	8.239210e+07 	NaN 	3.320396e+06 	6.513960e+09 	2.050438e+07 	1.204359e+07 	1.298442e+07
+GDP 	6.275076e+09 	8.158549e+09 	1.031982e+11 	3.248135e+09 	2.823371e+10 	9.973741e+08 	1.184735e+12 	2.208138e+11 	4.900470e+09 	2.331006e+09 	... 	1.430751e+10 	3.949626e+08 	1.455135e+11 	5.763326e+10 	NaN 	4.831800e+09 	4.714259e+13 	1.675377e+10 	8.331870e+09 	5.755215e+09
+2006 	Population 	2.518362e+07 	2.992547e+06 	3.374933e+07 	8.337300e+04 	1.854147e+07 	8.346700e+04 	3.209067e+08 	3.955875e+07 	3.002161e+06 	1.008300e+05 	... 	2.648825e+07 	2.146350e+05 	2.722123e+07 	8.331120e+07 	NaN 	3.406334e+06 	6.594722e+09 	2.109397e+07 	1.238151e+07 	1.312794e+07
+GDP 	7.057598e+09 	8.992642e+09 	1.170273e+11 	3.536452e+09 	4.178948e+10 	1.135144e+09 	1.404190e+12 	2.626665e+11 	6.384452e+09 	2.421475e+09 	... 	1.703090e+10 	4.393768e+08 	1.834775e+11 	6.637166e+10 	NaN 	4.910100e+09 	5.107451e+13 	1.908173e+10 	1.275686e+10 	5.443896e+09
+2007 	Population 	2.587754e+07 	2.970017e+06 	3.426197e+07 	8.487800e+04 	1.918391e+07 	8.439700e+04 	3.287666e+08 	3.996990e+07 	2.988117e+06 	1.012180e+05 	... 	2.686800e+07 	2.199560e+05 	2.767066e+07 	8.421850e+07 	NaN 	3.494496e+06 	6.675833e+09 	2.170110e+07 	1.273868e+07 	1.329780e+07
+GDP 	9.843842e+09 	1.070101e+10 	1.349771e+11 	4.010785e+09 	6.044892e+10 	1.289254e+09 	1.641666e+12 	3.293175e+11 	9.206302e+09 	2.623726e+09 	... 	2.231139e+10 	5.264283e+08 	2.303642e+11 	7.741443e+10 	NaN 	5.505800e+09 	5.758343e+13 	2.563367e+10 	1.405696e+10 	5.291950e+09
+2008 	Population 	2.652874e+07 	2.947314e+06 	3.481106e+07 	8.561600e+04 	1.984225e+07 	8.535000e+04 	3.368865e+08 	4.038186e+07 	2.975029e+06 	1.013420e+05 	... 	2.730280e+07 	2.253350e+05 	2.811672e+07 	8.511870e+07 	NaN 	3.596688e+06 	6.758303e+09 	2.232270e+07 	1.311458e+07 	1.349546e+07
+GDP 	1.019053e+10 	1.288135e+10 	1.710007e+11 	4.001349e+09 	8.417803e+10 	1.347350e+09 	2.081343e+12 	4.037820e+11 	1.166204e+10 	2.791961e+09 	... 	2.793403e+10 	6.079586e+08 	3.156002e+11 	9.913030e+10 	NaN 	6.673500e+09 	6.312856e+13 	3.039720e+10 	1.791086e+10 	4.415703e+09
+2009 	Population 	2.720729e+07 	2.927519e+06 	3.540179e+07 	8.547400e+04 	2.052010e+07 	8.630000e+04 	3.450542e+08 	4.079864e+07 	2.966108e+06 	1.014160e+05 	... 	2.776740e+07 	2.307820e+05 	2.855861e+07 	8.602500e+07 	NaN 	3.702218e+06 	6.840956e+09 	2.295423e+07 	1.350785e+07 	1.372100e+07
+GDP 	1.248694e+10 	1.204421e+10 	1.372110e+11 	3.649863e+09 	7.549238e+10 	1.206410e+09 	1.798878e+12 	3.766279e+11 	8.647937e+09 	2.498933e+09 	... 	3.281683e+10 	6.100666e+08 	3.294190e+11 	1.060146e+11 	NaN 	7.268200e+09 	5.983553e+13 	2.845950e+10 	1.532834e+10 	8.157077e+09
+2010 	Population 	2.796221e+07 	2.913021e+06 	3.603616e+07 	8.441900e+04 	2.121995e+07 	8.723300e+04 	3.531122e+08 	4.122288e+07 	2.963496e+06 	1.015970e+05 	... 	2.856240e+07 	2.362990e+05 	2.899574e+07 	8.693250e+07 	NaN 	3.811102e+06 	6.923684e+09 	2.359197e+07 	1.391744e+07 	1.397390e+07
+GDP 	1.593680e+10 	1.192695e+10 	1.612073e+11 	3.346317e+09 	8.247091e+10 	1.135539e+09 	2.103825e+12 	4.616402e+11 	9.260285e+09 	2.467704e+09 	... 	3.933277e+10 	7.008043e+08 	3.938015e+11 	1.159317e+11 	NaN 	8.913100e+09 	6.564782e+13 	3.090675e+10 	2.026555e+10 	9.422161e+09
+2011 	Population 	2.880917e+07 	2.904780e+06 	3.671713e+07 	8.232600e+04 	2.194230e+07 	8.815200e+04 	3.610318e+08 	4.165562e+07 	2.967984e+06 	1.019360e+05 	... 	2.933940e+07 	2.418760e+05 	2.942763e+07 	8.786030e+07 	NaN 	3.927051e+06 	7.006908e+09 	2.423494e+07 	1.434353e+07 	1.425559e+07
+GDP 	1.793024e+10 	1.289087e+10 	2.000131e+11 	3.427236e+09 	1.041159e+11 	1.129918e+09 	2.497945e+12 	5.578902e+11 	1.014211e+10 	2.584464e+09 	... 	4.532432e+10 	7.921497e+08 	3.164822e+11 	1.355395e+11 	NaN 	1.045985e+10 	7.284314e+13 	3.107886e+10 	2.345952e+10 	1.095623e+10
+2012 	Population 	2.972680e+07 	2.900247e+06 	3.743943e+07 	7.931600e+04 	2.268563e+07 	8.906900e+04 	3.688026e+08 	4.209522e+07 	2.978339e+06 	NaN 	... 	2.977450e+07 	2.474980e+05 	2.985424e+07 	8.880920e+07 	NaN 	4.046901e+06 	7.089452e+09 	2.488279e+07 	1.478658e+07 	1.456548e+07
+GDP 	2.053654e+10 	1.231978e+10 	2.090474e+11 	3.146178e+09 	1.153984e+11 	1.204713e+09 	2.773270e+12 	6.043785e+11 	1.061932e+10 	NaN 	... 	5.118344e+10 	7.817029e+08 	3.812862e+11 	1.558200e+11 	NaN 	1.127940e+10 	7.442836e+13 	3.207477e+10 	2.550306e+10 	1.239272e+10
+2013 	Population 	3.068250e+07 	2.896652e+06 	3.818614e+07 	7.590200e+04 	2.344820e+07 	8.998500e+04 	3.765043e+08 	4.253830e+07 	2.992192e+06 	NaN 	... 	3.024320e+07 	2.531650e+05 	3.027604e+07 	8.975950e+07 	NaN 	4.169506e+06 	7.176092e+09 	2.553322e+07 	1.524609e+07 	1.489809e+07
+GDP 	2.004633e+10 	1.278103e+10 	2.097035e+11 	3.249101e+09 	1.249121e+11 	1.200588e+09 	2.846994e+12 	6.239320e+11 	1.112147e+10 	NaN 	... 	5.679566e+10 	8.017876e+08 	3.713366e+11 	1.712220e+11 	NaN 	1.247600e+10 	7.643132e+13 	3.595450e+10 	2.804552e+10 	1.349023e+10
+2014 	Population 	3.162751e+07 	2.893654e+06 	3.893433e+07 	NaN 	2.422752e+07 	9.090000e+04 	3.842226e+08 	4.298003e+07 	3.006154e+06 	NaN 	... 	3.075770e+07 	2.588830e+05 	NaN 	9.072890e+07 	NaN 	4.294682e+06 	7.260780e+09 	NaN 	1.572134e+07 	1.524586e+07
+GDP 	2.005019e+10 	1.327796e+10 	2.135185e+11 	NaN 	1.267751e+11 	1.220976e+09 	2.873600e+12 	5.480549e+11 	1.164444e+10 	NaN 	... 	6.313285e+10 	8.149546e+08 	NaN 	1.862047e+11 	NaN 	1.271560e+10 	7.810634e+13 	NaN 	2.713464e+10 	1.419691e+10
+2015 	Population 	3.252656e+07 	2.889167e+06 	3.966652e+07 	NaN 	2.502197e+07 	9.181800e+04 	3.920223e+08 	NaN 	3.017712e+06 	NaN 	... 	3.129950e+07 	NaN 	NaN 	9.170380e+07 	NaN 	4.422143e+06 	7.346633e+09 	NaN 	1.621177e+07 	1.560275e+07
+GDP 	1.919944e+10 	1.145560e+10 	1.668386e+11 	NaN 	1.026431e+11 	1.297285e+09 	2.530102e+12 	NaN 	1.056140e+10 	NaN 	... 	6.673280e+10 	NaN 	NaN 	1.935994e+11 	NaN 	1.267740e+10 	7.343364e+13 	NaN 	2.120156e+10 	1.389294e+10
+
+112 rows × 252 columns
+
+world =  pd.read_csv("worldstats.csv", index_col = ["country","year"])
+
+world.head(3)
+
+		Population 	GDP
+country 	year 		
+Arab World 	2015 	392022276.0 	2.530102e+12
+2014 	384222592.0 	2.873600e+12
+2013 	376504253.0 	2.846994e+12
+
+s = world.stack()
+
+s.head(3)
+
+country     year            
+Arab World  2015  Population    3.920223e+08
+                  GDP           2.530102e+12
+            2014  Population    3.842226e+08
+dtype: float64
+
+s.unstack(level = [1,0])
+
+?
+
+year 	2015 	2014 	2013 	2012 	2011 	2010 	2009 	2008 	2007 	2006 	... 	1969 	1968 	1967 	1966 	1965 	1964 	1963 	1962 	1961 	1960
+country 	Arab World 	Arab World 	Arab World 	Arab World 	Arab World 	Arab World 	Arab World 	Arab World 	Arab World 	Arab World 	... 	Zimbabwe 	Zimbabwe 	Zimbabwe 	Zimbabwe 	Zimbabwe 	Zimbabwe 	Zimbabwe 	Zimbabwe 	Zimbabwe 	Zimbabwe
+Population 	3.920223e+08 	3.842226e+08 	3.765043e+08 	3.688026e+08 	3.610318e+08 	3.531122e+08 	3.450542e+08 	3.368865e+08 	3.287666e+08 	3.209067e+08 	... 	5.036321e+06 	4.874113e+06 	4.718612e+06 	4.568320e+06 	4.422132e+06 	4.279561e+06 	4.140804e+06 	4.006262e+06 	3.876638e+06 	3.752390e+06
+GDP 	2.530102e+12 	2.873600e+12 	2.846994e+12 	2.773270e+12 	2.497945e+12 	2.103825e+12 	1.798878e+12 	2.081343e+12 	1.641666e+12 	1.404190e+12 	... 	1.747999e+09 	1.479600e+09 	1.397002e+09 	1.281750e+09 	1.311436e+09 	1.217138e+09 	1.159512e+09 	1.117602e+09 	1.096647e+09 	1.052990e+09
+
+2 rows × 11211 columns
+
+s.unstack(level = [0,1])
+
+country 	Arab World 	... 	Zimbabwe
+year 	2015 	2014 	2013 	2012 	2011 	2010 	2009 	2008 	2007 	2006 	... 	1969 	1968 	1967 	1966 	1965 	1964 	1963 	1962 	1961 	1960
+Population 	3.920223e+08 	3.842226e+08 	3.765043e+08 	3.688026e+08 	3.610318e+08 	3.531122e+08 	3.450542e+08 	3.368865e+08 	3.287666e+08 	3.209067e+08 	... 	5.036321e+06 	4.874113e+06 	4.718612e+06 	4.568320e+06 	4.422132e+06 	4.279561e+06 	4.140804e+06 	4.006262e+06 	3.876638e+06 	3.752390e+06
+GDP 	2.530102e+12 	2.873600e+12 	2.846994e+12 	2.773270e+12 	2.497945e+12 	2.103825e+12 	1.798878e+12 	2.081343e+12 	1.641666e+12 	1.404190e+12 	... 	1.747999e+09 	1.479600e+09 	1.397002e+09 	1.281750e+09 	1.311436e+09 	1.217138e+09 	1.159512e+09 	1.117602e+09 	1.096647e+09 	1.052990e+09
+
+2 rows × 11211 columns
+
+s.unstack(level = ["country","year"])
+
+country 	Arab World 	... 	Zimbabwe
+year 	2015 	2014 	2013 	2012 	2011 	2010 	2009 	2008 	2007 	2006 	... 	1969 	1968 	1967 	1966 	1965 	1964 	1963 	1962 	1961 	1960
+Population 	3.920223e+08 	3.842226e+08 	3.765043e+08 	3.688026e+08 	3.610318e+08 	3.531122e+08 	3.450542e+08 	3.368865e+08 	3.287666e+08 	3.209067e+08 	... 	5.036321e+06 	4.874113e+06 	4.718612e+06 	4.568320e+06 	4.422132e+06 	4.279561e+06 	4.140804e+06 	4.006262e+06 	3.876638e+06 	3.752390e+06
+GDP 	2.530102e+12 	2.873600e+12 	2.846994e+12 	2.773270e+12 	2.497945e+12 	2.103825e+12 	1.798878e+12 	2.081343e+12 	1.641666e+12 	1.404190e+12 	... 	1.747999e+09 	1.479600e+09 	1.397002e+09 	1.281750e+09 	1.311436e+09 	1.217138e+09 	1.159512e+09 	1.117602e+09 	1.096647e+09 	1.052990e+09
+
+2 rows × 11211 columns
+
+s.unstack(level = ["year","country"])
+
+year 	2015 	2014 	2013 	2012 	2011 	2010 	2009 	2008 	2007 	2006 	... 	1969 	1968 	1967 	1966 	1965 	1964 	1963 	1962 	1961 	1960
+country 	Arab World 	Arab World 	Arab World 	Arab World 	Arab World 	Arab World 	Arab World 	Arab World 	Arab World 	Arab World 	... 	Zimbabwe 	Zimbabwe 	Zimbabwe 	Zimbabwe 	Zimbabwe 	Zimbabwe 	Zimbabwe 	Zimbabwe 	Zimbabwe 	Zimbabwe
+Population 	3.920223e+08 	3.842226e+08 	3.765043e+08 	3.688026e+08 	3.610318e+08 	3.531122e+08 	3.450542e+08 	3.368865e+08 	3.287666e+08 	3.209067e+08 	... 	5.036321e+06 	4.874113e+06 	4.718612e+06 	4.568320e+06 	4.422132e+06 	4.279561e+06 	4.140804e+06 	4.006262e+06 	3.876638e+06 	3.752390e+06
+GDP 	2.530102e+12 	2.873600e+12 	2.846994e+12 	2.773270e+12 	2.497945e+12 	2.103825e+12 	1.798878e+12 	2.081343e+12 	1.641666e+12 	1.404190e+12 	... 	1.747999e+09 	1.479600e+09 	1.397002e+09 	1.281750e+09 	1.311436e+09 	1.217138e+09 	1.159512e+09 	1.117602e+09 	1.096647e+09 	1.052990e+09
+
+2 rows × 11211 columns
+
+s = s.unstack("year", fill_value = 0)
+
+s.head(3)
+
+	year 	1960 	1961 	1962 	1963 	1964 	1965 	1966 	1967 	1968 	1969 	... 	2006 	2007 	2008 	2009 	2010 	2011 	2012 	2013 	2014 	2015
+country 																						
+Afghanistan 	Population 	8.994793e+06 	9.164945e+06 	9.343772e+06 	9.531555e+06 	9.728645e+06 	9.935358e+06 	1.014884e+07 	1.036860e+07 	1.059979e+07 	1.084951e+07 	... 	2.518362e+07 	2.587754e+07 	2.652874e+07 	2.720729e+07 	2.796221e+07 	2.880917e+07 	2.972680e+07 	3.068250e+07 	3.162751e+07 	3.252656e+07
+GDP 	5.377778e+08 	5.488889e+08 	5.466667e+08 	7.511112e+08 	8.000000e+08 	1.006667e+09 	1.400000e+09 	1.673333e+09 	1.373333e+09 	1.408889e+09 	... 	7.057598e+09 	9.843842e+09 	1.019053e+10 	1.248694e+10 	1.593680e+10 	1.793024e+10 	2.053654e+10 	2.004633e+10 	2.005019e+10 	1.919944e+10
+Albania 	Population 	0.000000e+00 	0.000000e+00 	0.000000e+00 	0.000000e+00 	0.000000e+00 	0.000000e+00 	0.000000e+00 	0.000000e+00 	0.000000e+00 	0.000000e+00 	... 	2.992547e+06 	2.970017e+06 	2.947314e+06 	2.927519e+06 	2.913021e+06 	2.904780e+06 	2.900247e+06 	2.896652e+06 	2.893654e+06 	2.889167e+06
+
+3 rows × 56 columns
+
+?
+
+# The pivot Method
+
+sales =  pd.read_csv("salesmen.csv" ,  parse_dates = ["Date"])
+
+sales["Salesman"] = sales["Salesman"].astype("category")
+
+sales.head(3)
+
+	Date 	Salesman 	Revenue
+0 	2016-01-01 	Bob 	7172
+1 	2016-01-02 	Bob 	6362
+2 	2016-01-03 	Bob 	5982
+
+sales["Salesman"].value_counts()
+
+Ronald    366
+Oscar     366
+Jeb       366
+Dave      366
+Bob       366
+Name: Salesman, dtype: int64
+
+sales.pivot(index= "Date", columns = "Salesman",values = "Revenue")
+
+Salesman 	Bob 	Dave 	Jeb 	Oscar 	Ronald
+Date 					
+2016-01-01 	7172 	1864 	4430 	5250 	2639
+2016-01-02 	6362 	8278 	8026 	8661 	4951
+2016-01-03 	5982 	4226 	5188 	7075 	2703
+2016-01-04 	7917 	3868 	3144 	2524 	4258
+2016-01-05 	7837 	2287 	938 	2793 	7771
+2016-01-06 	1744 	7859 	8702 	7794 	5930
+2016-01-07 	918 	8597 	4250 	9728 	1933
+2016-01-08 	9863 	3092 	9719 	5263 	5709
+2016-01-09 	8337 	1794 	5614 	7144 	4707
+2016-01-10 	7543 	7105 	301 	7663 	8267
+2016-01-11 	1053 	6851 	9489 	8888 	1340
+2016-01-12 	4362 	7147 	8719 	3092 	279
+2016-01-13 	6812 	6160 	2349 	6139 	7540
+2016-01-14 	9047 	7533 	7690 	5235 	4214
+2016-01-15 	3594 	9883 	6917 	5507 	5346
+2016-01-16 	9800 	3622 	474 	4947 	9636
+2016-01-17 	7215 	4565 	8963 	3325 	6058
+2016-01-18 	7744 	8246 	2351 	2611 	3602
+2016-01-19 	9560 	9229 	5512 	1905 	316
+2016-01-20 	9863 	8358 	9509 	6005 	9352
+2016-01-21 	547 	4229 	2453 	2798 	6781
+2016-01-22 	3505 	4417 	2875 	879 	5166
+2016-01-23 	6969 	358 	8853 	4245 	2479
+2016-01-24 	696 	7817 	6705 	3798 	4835
+2016-01-25 	4302 	6354 	2882 	1143 	9750
+2016-01-26 	9427 	7544 	1009 	871 	8738
+2016-01-27 	7990 	2255 	4020 	2403 	1768
+2016-01-28 	6271 	3419 	1735 	3691 	7264
+2016-01-29 	5804 	1378 	6477 	418 	8545
+2016-01-30 	3285 	6456 	2253 	7776 	658
+... 	... 	... 	... 	... 	...
+2016-12-02 	5570 	9842 	982 	5589 	5956
+2016-12-03 	7910 	4284 	9363 	6009 	2252
+2016-12-04 	2869 	8389 	5980 	537 	1484
+2016-12-05 	4013 	3089 	8999 	3895 	2867
+2016-12-06 	1695 	9142 	4896 	3060 	5734
+2016-12-07 	1010 	3707 	4634 	295 	5409
+2016-12-08 	1149 	3073 	5930 	5038 	9951
+2016-12-09 	4432 	6820 	8592 	258 	96
+2016-12-10 	194 	3938 	3530 	9392 	8713
+2016-12-11 	7676 	8805 	1134 	690 	5843
+2016-12-12 	7290 	3917 	9004 	5621 	4524
+2016-12-13 	7253 	9168 	8031 	3284 	5193
+2016-12-14 	9777 	2632 	3162 	2245 	8161
+2016-12-15 	7933 	2051 	4408 	3449 	9557
+2016-12-16 	6742 	1148 	3020 	1763 	2318
+2016-12-17 	5641 	8921 	6126 	1641 	9042
+2016-12-18 	8445 	9203 	5843 	1022 	7979
+2016-12-19 	3065 	4255 	8136 	3366 	2734
+2016-12-20 	3864 	7209 	2082 	364 	5757
+2016-12-21 	4080 	1335 	5940 	3579 	359
+2016-12-22 	5294 	6986 	4389 	6476 	825
+2016-12-23 	5063 	5507 	9 	6495 	9210
+2016-12-24 	1731 	5520 	8230 	9346 	4114
+2016-12-25 	8325 	4004 	6569 	8321 	7490
+2016-12-26 	6664 	3211 	1572 	6172 	6170
+2016-12-27 	2045 	2843 	6666 	835 	2981
+2016-12-28 	100 	8888 	1243 	3073 	6129
+2016-12-29 	4115 	9490 	3498 	6424 	7662
+2016-12-30 	2577 	3594 	8858 	7088 	2570
+2016-12-31 	3845 	6830 	9717 	8408 	2619
+
+366 rows × 5 columns
+
+len(sales.pivot(index= "Date", columns = "Salesman",values = "Revenue"))
+
+366
+
+# The .pivot_table() Method
+
+foods = pd.read_csv("foods.csv")
+
+foods.head(3)
+
+	First Name 	Gender 	City 	Frequency 	Item 	Spend
+0 	Wanda 	Female 	Stamford 	Weekly 	Burger 	15.66
+1 	Eric 	Male 	Stamford 	Daily 	Chalupa 	10.56
+2 	Charles 	Male 	New York 	Never 	Sushi 	42.14
+
+foods.pivot_table(values = "Spend", index = "Gender",aggfunc= "mean")
+
+	Spend
+Gender 	
+Female 	50.709629
+Male 	49.397623
+
+foods.pivot_table(values = "Spend", index = "Gender",aggfunc= "sum")
+
+	Spend
+Gender 	
+Female 	25963.33
+Male 	24106.04
+
+foods.pivot_table(values = "Spend", index = ["Gender","Item"],columns = "City", aggfunc= "min")
+
+pd.pivot_table(data = foods, values = "Spend", index = ["Gender","Item"],columns = "City", aggfunc= "min" ).head(3)
+
+	City 	New York 	Philadelphia 	Stamford
+Gender 	Item 			
+Female 	Burger 	2.25 	1.97 	6.24
+Burrito 	1.02 	1.04 	1.18
+Chalupa 	1.96 	9.35 	9.09
+
+# The pd.melt() Method
+
+sales = pd.read_csv("quarters.csv")
+
+sales.head(3)
+
+	Salesman 	Q1 	Q2 	Q3 	Q4
+0 	Boris 	602908 	233879 	354479 	32704
+1 	Bob 	43790 	514863 	297151 	544493
+2 	Tommy 	392668 	113579 	430882 	247231
+
+pd.melt(sales, id_vars = "Salesman" )
+
+?
+
+pd.melt(sales, id_vars = "Salesman", var_name = "Quarter" , value_name = "Revenue")
+
+	Salesman 	Quarter 	Revenue
+0 	Boris 	Q1 	602908
+1 	Bob 	Q1 	43790
+2 	Tommy 	Q1 	392668
+3 	Travis 	Q1 	834663
+4 	Donald 	Q1 	580935
+5 	Ted 	Q1 	656644
+6 	Jeb 	Q1 	486141
+7 	Stacy 	Q1 	479662
+8 	Morgan 	Q1 	992673
+9 	Boris 	Q2 	233879
+10 	Bob 	Q2 	514863
+11 	Tommy 	Q2 	113579
+12 	Travis 	Q2 	266785
+13 	Donald 	Q2 	411379
+14 	Ted 	Q2 	70803
+15 	Jeb 	Q2 	600753
+16 	Stacy 	Q2 	742806
+17 	Morgan 	Q2 	879183
+18 	Boris 	Q3 	354479
+19 	Bob 	Q3 	297151
+20 	Tommy 	Q3 	430882
+21 	Travis 	Q3 	749238
+22 	Donald 	Q3 	110390
+23 	Ted 	Q3 	375948
+24 	Jeb 	Q3 	742716
+25 	Stacy 	Q3 	770712
+26 	Morgan 	Q3 	37945
+27 	Boris 	Q4 	32704
+28 	Bob 	Q4 	544493
+29 	Tommy 	Q4 	247231
+30 	Travis 	Q4 	570524
+31 	Donald 	Q4 	651572
+32 	Ted 	Q4 	321388
+33 	Jeb 	Q4 	404995
+34 	Stacy 	Q4 	2501
+35 	Morgan 	Q4 	293710
+
+?
+
+?
+
+?
+
+?
+
+?
+
+?
+
+?
+
+?
+
+?
+

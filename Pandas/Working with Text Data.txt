@@ -1,0 +1,340 @@
+
+
+
+
+
+Working with text Data
+
+import pandas as pd
+
+chicago = pd.read_csv("chicago.csv")
+
+chicago["Department"] = chicago["Department"].astype("category")
+
+?
+
+chicago.head(3)
+
+	Name 	Position Title 	Department 	Employee Annual Salary
+0 	AARON, ELVIA J 	WATER RATE TAKER 	WATER MGMNT 	$90744.00
+1 	AARON, JEFFERY M 	POLICE OFFICER 	POLICE 	$84450.00
+2 	AARON, KARINA 	POLICE OFFICER 	POLICE 	$84450.00
+
+chicago.info()
+
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 32063 entries, 0 to 32062
+Data columns (total 4 columns):
+Name                      32062 non-null object
+Position Title            32062 non-null object
+Department                32062 non-null category
+Employee Annual Salary    32062 non-null object
+dtypes: category(1), object(3)
+memory usage: 408.0+ KB
+
+chicago["Department"].nunique()
+
+35
+
+chicago["Department"].count()
+
+32062
+
+chicago["Department"] = chicago["Department"].astype("category")
+
+Common String Methods  .lower(), .upper(), .title() and .len()
+
+chicago = pd.read_csv("chicago.csv")
+
+chicago["Department"] = chicago["Department"].astype("category")
+
+?
+
+chicago.head(3)
+
+	Name 	Position Title 	Department 	Employee Annual Salary
+0 	AARON, ELVIA J 	WATER RATE TAKER 	WATER MGMNT 	$90744.00
+1 	AARON, JEFFERY M 	POLICE OFFICER 	POLICE 	$84450.00
+2 	AARON, KARINA 	POLICE OFFICER 	POLICE 	$84450.00
+
+"HELLO".lower()
+
+"hello".upper()
+
+'HELLO'
+
+"hello world".title()
+
+'Hello World'
+
+len("hello world")
+
+11
+
+chicago["Name"].str.lower()
+
+chicago["Name"].str.title()
+
+chicago["Position Title"] = chicago["Position Title"].str.title()
+
+chicago.head(3)
+
+	Name 	Position Title 	Department 	Employee Annual Salary
+0 	AARON, ELVIA J 	Water Rate Taker 	WATER MGMNT 	$90744.00
+1 	AARON, JEFFERY M 	Police Officer 	POLICE 	$84450.00
+2 	AARON, KARINA 	Police Officer 	POLICE 	$84450.00
+
+chicago["Department"].str.len()
+
+The .str.replace() Method
+
+chicago = pd.read_csv("chicago.csv").dropna(how = "all")
+
+chicago["Department"] = chicago["Department"].astype("category")
+
+?
+
+chicago.tail(3)
+
+	Name 	Position Title 	Department 	Employee Annual Salary
+32059 	ZYMANTAS, MARK E 	POLICE OFFICER 	POLICE 	$84450.00
+32060 	ZYRKOWSKI, CARLO E 	POLICE OFFICER 	POLICE 	$87384.00
+32061 	ZYSKOWSKI, DARIUSZ 	CHIEF DATA BASE ANALYST 	DoIT 	$113664.00
+
+"Hello World".replace("l","!")  # replace()  method on regular string
+
+'He!!o Wor!d'
+
+chicago["Department"] = chicago["Department"].str.replace("MGMNT","MANAGEMENT")
+
+chicago.head(3)
+
+	Name 	Position Title 	Department 	Employee Annual Salary
+0 	AARON, ELVIA J 	WATER RATE TAKER 	WATER MANAGEMENT 	$90744.00
+1 	AARON, JEFFERY M 	POLICE OFFICER 	POLICE 	$84450.00
+2 	AARON, KARINA 	POLICE OFFICER 	POLICE 	$84450.00
+
+chicago["Employee Annual Salary"] = chicago["Employee Annual Salary"].str.replace("$", "").astype(float)
+
+chicago["Employee Annual Salary"].sum()
+
+2571506375.36
+
+chicago["Employee Annual Salary"].mean()
+
+80204.178633899
+
+chicago["Employee Annual Salary"].std()
+
+25098.329867510587
+
+chicago["Employee Annual Salary"].nlargest()
+
+8184     300000.0
+7954     216210.0
+25532    202728.0
+8924     197736.0
+8042     197724.0
+Name: Employee Annual Salary, dtype: float64
+
+chicago.info()
+
+Filtering with String methods
+
+chicago = pd.read_csv("chicago.csv").dropna(how = "all")
+
+chicago["Department"] = chicago["Department"].astype("category")
+
+?
+
+chicago.tail(3)
+
+	Name 	Position Title 	Department 	Employee Annual Salary
+32059 	ZYMANTAS, MARK E 	POLICE OFFICER 	POLICE 	$84450.00
+32060 	ZYRKOWSKI, CARLO E 	POLICE OFFICER 	POLICE 	$87384.00
+32061 	ZYSKOWSKI, DARIUSZ 	CHIEF DATA BASE ANALYST 	DoIT 	$113664.00
+
+mask = chicago["Position Title"].str.lower().str.contains("water")
+
+chicago[mask]
+
+chicago[chicago["Position Title"].str.lower().str.startswith("water")]
+
+chicago["Position Title"].str.lower().str.endswith("ist")
+
+?
+
+More String Methods .strip(), lstrip(), and .rstrip()
+
+chicago = pd.read_csv("chicago.csv").dropna(how = "all")
+
+chicago["Department"] = chicago["Department"].astype("category")
+
+?
+
+chicago.tail(3)
+
+	Name 	Position Title 	Department 	Employee Annual Salary
+32059 	ZYMANTAS, MARK E 	POLICE OFFICER 	POLICE 	$84450.00
+32060 	ZYRKOWSKI, CARLO E 	POLICE OFFICER 	POLICE 	$87384.00
+32061 	ZYSKOWSKI, DARIUSZ 	CHIEF DATA BASE ANALYST 	DoIT 	$113664.00
+
+"   Hello World      ". lstrip()
+
+'Hello World      '
+
+"   Hello World      ". rstrip()
+
+'   Hello World'
+
+"   Hello World      ". strip()
+
+'Hello World'
+
+chicago["Name"] = chicago["Name"].str.lstrip().str.rstrip()
+
+chicago["Position Title"] = chicago["Position Title"].str.lstrip()
+
+?
+
+String Methods on Index and Columns 
+
+chicago = pd.read_csv("chicago.csv", index_col = "Name").dropna(how = "all")
+
+chicago["Department"] = chicago["Department"].astype("category")
+
+?
+
+chicago.tail(3)
+
+	Position Title 	Department 	Employee Annual Salary
+Name 			
+ZYMANTAS, MARK E 	POLICE OFFICER 	POLICE 	$84450.00
+ZYRKOWSKI, CARLO E 	POLICE OFFICER 	POLICE 	$87384.00
+ZYSKOWSKI, DARIUSZ 	CHIEF DATA BASE ANALYST 	DoIT 	$113664.00
+
+  chicago.index = chicago.index.str.strip().str.title()
+
+chicago.head(3)
+
+	Position Title 	Department 	Employee Annual Salary
+Name 			
+Aaron, Elvia J 	WATER RATE TAKER 	WATER MGMNT 	$90744.00
+Aaron, Jeffery M 	POLICE OFFICER 	POLICE 	$84450.00
+Aaron, Karina 	POLICE OFFICER 	POLICE 	$84450.00
+
+chicago.columns = chicago.columns.str.upper()
+
+chicago.head(3)
+
+	POSITION TITLE 	DEPARTMENT 	EMPLOYEE ANNUAL SALARY
+Name 			
+Aaron, Elvia J 	WATER RATE TAKER 	WATER MGMNT 	$90744.00
+Aaron, Jeffery M 	POLICE OFFICER 	POLICE 	$84450.00
+Aaron, Karina 	POLICE OFFICER 	POLICE 	$84450.00
+
+?
+
+Split Strings by characters with .str.split() Method
+
+chicago = pd.read_csv("chicago.csv").dropna(how = "all")
+
+chicago["Department"] = chicago["Department"].astype("category")
+
+?
+
+chicago.tail(3)
+
+	Name 	Position Title 	Department 	Employee Annual Salary
+32059 	ZYMANTAS, MARK E 	POLICE OFFICER 	POLICE 	$84450.00
+32060 	ZYRKOWSKI, CARLO E 	POLICE OFFICER 	POLICE 	$87384.00
+32061 	ZYSKOWSKI, DARIUSZ 	CHIEF DATA BASE ANALYST 	DoIT 	$113664.00
+
+"Hello my name is Tom".split(" ")   # split()  method on regular string 
+
+['Hello', 'my', 'name', 'is', 'Tom']
+
+chicago["Name"].str.split(",")
+
+chicago["Name"].str.split(",").str.get(0).str.title().value_counts()
+
+chicago["Position Title"].str.split(" ").str.get(0).value_counts()
+
+?
+
+More Practice with splits
+
+chicago = pd.read_csv("chicago.csv").dropna(how = "all")
+
+chicago["Department"] = chicago["Department"].astype("category")
+
+?
+
+chicago.head(3)
+
+	Name 	Position Title 	Department 	Employee Annual Salary
+0 	AARON, ELVIA J 	WATER RATE TAKER 	WATER MGMNT 	$90744.00
+1 	AARON, JEFFERY M 	POLICE OFFICER 	POLICE 	$84450.00
+2 	AARON, KARINA 	POLICE OFFICER 	POLICE 	$84450.00
+
+chicago["Name"].str.split(",").str.get(0).value_counts().head(3)
+
+WILLIAMS    293
+JOHNSON     244
+SMITH       241
+Name: Name, dtype: int64
+
+chicago["Name"].str.split(",").str.get(1).str.strip().str.split(" ").str.get(0).value_counts().head(3)
+
+MICHAEL    1153
+JOHN        899
+JAMES       676
+Name: Name, dtype: int64
+
+?
+
+The expand and n paramaeters of the str.split() Method
+
+chicago = pd.read_csv("chicago.csv").dropna(how = "all")
+
+chicago["Department"] = chicago["Department"].astype("category")
+
+?
+
+chicago.head(3)
+
+	Name 	Position Title 	Department 	Employee Annual Salary
+0 	AARON, ELVIA J 	WATER RATE TAKER 	WATER MGMNT 	$90744.00
+1 	AARON, JEFFERY M 	POLICE OFFICER 	POLICE 	$84450.00
+2 	AARON, KARINA 	POLICE OFFICER 	POLICE 	$84450.00
+
+chicago[["First Name", "last Name"]] = chicago["Name"].str.split(",", expand =True)
+
+chicago.head(3)
+
+	Name 	Position Title 	Department 	Employee Annual Salary 	First Name 	last Name
+0 	AARON, ELVIA J 	WATER RATE TAKER 	WATER MGMNT 	$90744.00 	AARON 	ELVIA J
+1 	AARON, JEFFERY M 	POLICE OFFICER 	POLICE 	$84450.00 	AARON 	JEFFERY M
+2 	AARON, KARINA 	POLICE OFFICER 	POLICE 	$84450.00 	AARON 	KARINA
+
+chicago[["First Title Word","Remaining Words"]] = chicago["Position Title"].str.split(" ", expand =True, n = 1)
+
+chicago.head(3)
+
+	Name 	Position Title 	Department 	Employee Annual Salary 	First Name 	last Name 	First Title Word 	Remaining Words
+0 	AARON, ELVIA J 	WATER RATE TAKER 	WATER MGMNT 	$90744.00 	AARON 	ELVIA J 	WATER 	RATE TAKER
+1 	AARON, JEFFERY M 	POLICE OFFICER 	POLICE 	$84450.00 	AARON 	JEFFERY M 	POLICE 	OFFICER
+2 	AARON, KARINA 	POLICE OFFICER 	POLICE 	$84450.00 	AARON 	KARINA 	POLICE 	OFFICER
+
+?
+
+?
+
+?
+
+?
+
+?
+
+?
+
