@@ -1,0 +1,195 @@
+
+
+import pandas as pd
+
+import numpy as np
+
+import matplotlib.pyplot as plt
+
+import seaborn as sns
+
+%matplotlib inline
+
+
+df = pd.read_csv('KNN_Project_Data.csv')
+
+df.head(3)
+
+	XVPM 	GWYH 	TRAT 	TLLZ 	IGGA 	HYKR 	EDFS 	GUUB 	MGJM 	JHZC 	TARGET CLASS
+0 	1636.670614 	817.988525 	2565.995189 	358.347163 	550.417491 	1618.870897 	2147.641254 	330.727893 	1494.878631 	845.136088 	0
+1 	1013.402760 	577.587332 	2644.141273 	280.428203 	1161.873391 	2084.107872 	853.404981 	447.157619 	1193.032521 	861.081809 	1
+2 	1300.035501 	820.518697 	2025.854469 	525.562292 	922.206261 	2552.355407 	818.676686 	845.491492 	1968.367513 	1647.186291 	1
+
+sns.pairplot(df,hue='TARGET CLASS', palette = 'coolwarm')
+
+<seaborn.axisgrid.PairGrid at 0x131b82f0>
+
+#Standardize the Variables
+
+#import StandardScaler from Scikit learn
+
+from sklearn.preprocessing import StandardScaler
+
+# Create StandardScaler() object called scaler
+
+scaler = StandardScaler()
+
+# fit scaler to the features 
+
+scaler.fit(df.drop('TARGET CLASS', axis =1))
+
+StandardScaler(copy=True, with_mean=True, with_std=True)
+
+# use the .transform() method to transform the features to scaled version
+
+scaled_features = scaler.transform(df.drop('TARGET CLASS', axis =1))
+
+# convert the scaled features to a dataframe and check the head of this dataframe to make sure the scaling worked
+
+df_feat = pd.DataFrame(scaled_features, columns= df.columns[:-1])
+
+df_feat.head(3)
+
+	XVPM 	GWYH 	TRAT 	TLLZ 	IGGA 	HYKR 	EDFS 	GUUB 	MGJM 	JHZC
+0 	1.568522 	-0.443435 	1.619808 	-0.958255 	-1.128481 	0.138336 	0.980493 	-0.932794 	1.008313 	-1.069627
+1 	-0.112376 	-1.056574 	1.741918 	-1.504220 	0.640009 	1.081552 	-1.182663 	-0.461864 	0.258321 	-1.041546
+2 	0.660647 	-0.436981 	0.775793 	0.213394 	-0.053171 	2.030872 	-1.240707 	1.149298 	2.184784 	0.342811
+
+# Train Test Split
+
+?
+
+# Use train_test_split to split your data into a training set and testing set
+
+from sklearn.cross_validation import train_test_split
+
+?
+
+?
+
+X = df_feat
+
+?
+
+y = df['TARGET CLASS']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=101)
+
+# Using KNN
+
+# import KNeighborsClassifier from scikit learn
+
+from sklearn.neighbors import KNeighborsClassifier
+
+# create a KNN Model instance with n_neighbors =1
+
+knn = KNeighborsClassifier(n_neighbors=1)
+
+# fit this KNN Model to the training data
+
+knn.fit(X_train, y_train)
+
+KNeighborsClassifier(algorithm='auto', leaf_size=30, metric='minkowski',
+           metric_params=None, n_jobs=1, n_neighbors=1, p=2,
+           weights='uniform')
+
+#Predictions and Evaluations
+
+?
+
+# Use the prdict method() to predict values using your KNN model and X_test 
+
+pred = knn.predict(X_test)
+
+# Create a confusion matrix and classification report 
+
+from sklearn.metrics import classification_report,confusion_matrix
+
+print(confusion_matrix(y_test, pred))
+
+print(classification_report(y_test,pred))
+
+[[109  43]
+ [ 41 107]]
+             precision    recall  f1-score   support
+
+          0       0.73      0.72      0.72       152
+          1       0.71      0.72      0.72       148
+
+avg / total       0.72      0.72      0.72       300
+
+# Choosing a K Value
+
+?
+
+# Create a loop that trains various KNN models with different k values,then keep track of the error_rate for each of these model with a list
+
+?
+
+error_rate = []
+
+?
+
+for i in range(1,40):
+
+    
+
+    knn = KNeighborsClassifier(n_neighbors=i)
+
+    knn.fit(X_train,y_train)
+
+    pred_i = knn.predict(X_test)
+
+    error_rate.append(np.mean(pred_i != y_test))
+
+ # Create the plot using the information from your loop 
+
+plt.figure(figsize=(10,6))
+
+?
+
+plt.plot(range(1,40),error_rate, color = 'blue',linestyle='--', marker='o', markerfacecolor = 'red', markersize =10)
+
+?
+
+plt.title('Error Rate vs K')
+
+plt.xlabel('K')
+
+plt.ylabel("Error Rate")
+
+Text(0,0.5,'Error Rate')
+
+# Retrain with new K Value
+
+?
+
+# Retrain your model with the best K value and re-do the classification report and confusion matrix
+
+knn = KNeighborsClassifier(n_neighbors=30)
+
+knn.fit(X_train, y_train)
+
+pred = knn.predict(X_test)
+
+print(confusion_matrix(y_test, pred))
+
+print('\n')
+
+print(classification_report(y_test,pred))
+
+[[124  28]
+ [ 24 124]]
+
+
+             precision    recall  f1-score   support
+
+          0       0.84      0.82      0.83       152
+          1       0.82      0.84      0.83       148
+
+avg / total       0.83      0.83      0.83       300
+
+?
+
+?
+
